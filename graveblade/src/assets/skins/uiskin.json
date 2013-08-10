@@ -1,0 +1,45 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: { text-font: { file: upheaval.fnt } },
+com.badlogic.gdx.graphics.Color: {
+green: { a: 1, b: 0, g: 1, r: 0 },
+white: { a: 1, b: 1, g: 1, r: 1 },
+gray: { a: 1, b: 0.8, g: 0.8, r: 0.8},
+red: { a: 1, b: 0, g: 0, r: 1 },
+light-orange: { a: 1, b: 0, g: 0.7, r: 1 },
+orange: { a: 1, b: 0, g: 0.4, r: 1 },
+black: { a: 1, b: 0, g: 0, r: 0 }
+},
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+default: { down: default-round-down, up: default-round },
+toggle: { down: default-round-down, checked: default-round-down, up: default-round }
+},
+com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+default: { font: text-font, fontColor: white, downFontColor: gray, overFontColor: light-orange },
+toggle: { down: default-round-down, up: default-round, checked: default-round-down, font: text-font, fontColor: white, downFontColor: red }
+},
+com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
+default: { vScroll: default-scroll, hScrollKnob: default-round-large, background: default-rect, hScroll: default-scroll, vScrollKnob: default-round-large }
+},
+com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
+default: {
+font: text-font, fontColor: white, background: default-select,
+scrollStyle: default,
+listStyle: { font: text-font, selection: default-select-selection }
+}
+},
+com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle: {
+default-vertical: { handle: default-splitpane-vertical },
+default-horizontal: { handle: default-splitpane }
+},
+com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
+default-horizontal: { background: default-slider, knob: default-slider-knob }
+},
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+default: { font: text-font, fontColor: white }
+},
+com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+default: { selection: selection, background: textfield, font: text-font, fontColor: white, cursor: cursor }
+}
+
+}
+

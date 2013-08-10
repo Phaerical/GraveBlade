@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="40" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tileset-platformer" tilewidth="32" tileheight="32">
+  <image source="tileset-platformer.png" trans="ff00ff" width="192" height="544"/>
+  <tile id="78">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="40" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztlssNwCAMQ9mwJ/ZfpRNAjZ2QUGLJl0ptH/mR3lrr5Wv8JPAXX6SKT1PxaSo+TcWn6Q98rLPzWbDfFj+Fg91fvOMz+15k/yLnjOJDc3Dz/LOoU+/4WfS1d36VWDJ8yl2wg48VE8Pd/YvMY08+tda8+ViNzpSJb/Q8qv6QOYDeHyv/2bn/zRi9hex/EYzobmrByOR8lUvdZ5h3Wb7y2X4BxAj3aw==
+  </data>
+ </layer>
+</map>
