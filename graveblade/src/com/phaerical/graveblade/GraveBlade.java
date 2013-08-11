@@ -1,6 +1,7 @@
 package com.phaerical.graveblade;
 
 import com.badlogic.gdx.Game;
+import com.phaerical.graveblade.screens.GameScreen;
 import com.phaerical.graveblade.screens.SplashScreen;
 
 public class GraveBlade extends Game
@@ -13,8 +14,8 @@ public class GraveBlade extends Game
 		SoundManager.load ();
 		screenManager = new ScreenManager (this);
 		
-		setScreen (new SplashScreen (this));
-		//setScreen (new GameScreen (this));
+		//setScreen (new SplashScreen (this));
+		setScreen (new GameScreen (this));
 	}
 	
 	

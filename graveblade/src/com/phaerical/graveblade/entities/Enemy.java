@@ -55,7 +55,6 @@ public class Enemy extends Entity
 					int damage = h.getDamage();
 					
 					hurt (damage);
-					GameScreen.ft.show (String.valueOf (damage), Color.WHITE, getX(), getY() + getHeight() * 2);
 					
 					if (!isAlive ())
 					{

@@ -31,7 +31,7 @@ public class Poring extends Enemy
 		this.setRunAnimation (new Animation (0.2f, atlas.createSprites ("idle")));
 		this.setJumpAnimation (new Animation (0.2f, atlas.createSprites ("idle")));
 		this.setAttackAnimation (new Animation (0.2f, atlas.createSprites ("idle")));
-		this.setHurtAnimation (new Animation (0.5f, atlas.createSprites ("hurt")));
+		this.setHurtAnimation (new Animation (0.3f, atlas.createSprites ("hurt")));
 		this.setDeathAnimation (new Animation (0.8f, atlas.createSprites ("hurt")));
 	}
 }

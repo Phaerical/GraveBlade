@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.phaerical.graveblade.SoundManager;
+import com.phaerical.graveblade.screens.GameScreen;
 
 public abstract class Entity extends Actor
 {
@@ -425,12 +426,16 @@ public abstract class Entity extends Actor
 	
 	public void hurt (int damage)
 	{
-		SoundManager.play (SoundManager.HIT);
-		setHealth (getHealth() - damage);
-		hurt = true;
-		attacking = false;
-		stateTime = 0;
-		velocity.y = 3;
+		if (!hurt)
+		{
+			SoundManager.play (SoundManager.HIT);
+			GameScreen.ft.show (String.valueOf (damage), Color.WHITE, getX(), getY() + getHeight() + 10);
+			setHealth (getHealth() - damage);
+			hurt = true;
+			attacking = false;
+			stateTime = 0;
+			velocity.y = 3;
+		}
 	}
 	
 	public Rectangle getBounds ()

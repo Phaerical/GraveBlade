@@ -36,6 +36,11 @@ public class Controller extends InputListener
 			hero.moveRight (true);
 		}
 		
+		if (keycode == Keys.C)
+		{
+			hero.castFrostPillar ();
+		}
+		
 		if (keycode == Keys.X)
 		{
 			hero.attack ();

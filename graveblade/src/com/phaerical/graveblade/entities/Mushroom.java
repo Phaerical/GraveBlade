@@ -31,7 +31,7 @@ public class Mushroom extends Enemy
 		this.setRunAnimation (new Animation (0.2f, atlas.createSprites ("run")));
 		this.setJumpAnimation (new Animation (0.2f, atlas.createSprites ("run")));
 		this.setAttackAnimation (new Animation (0.2f, atlas.createSprites ("run")));
-		this.setHurtAnimation (new Animation (0.5f, atlas.createSprites ("hurt")));
+		this.setHurtAnimation (new Animation (0.3f, atlas.createSprites ("hurt")));
 		this.setDeathAnimation (new Animation (0.3f, atlas.createSprites ("die")));
 	}
 }

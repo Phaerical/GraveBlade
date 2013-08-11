@@ -161,6 +161,23 @@ public class Hero extends Entity
 	}
 	
 	
+	public void castFrostPillar ()
+	{
+		FrostPillar fp = new FrostPillar ();
+		
+		if (facingRight)
+		{
+			fp.setPosition (getX()+100, getY());
+		}
+		else
+		{
+			fp.setPosition (getX()-100, getY());
+		}
+		
+		getStage().addActor(fp);
+	}
+	
+	
 	@Override
 	public void act (float delta)
 	{
@@ -202,9 +219,18 @@ public class Hero extends Entity
 	@Override
 	public void hurt (int damage)
 	{
-		super.hurt (damage);
-		
-		invincibleTime = INVINCIBLE_DURATION;
+		if (!hurt)
+		{
+			SoundManager.play (SoundManager.HIT);
+			GameScreen.ft.show ("-" + damage, Color.RED, getX(), getY() + getHeight() + 10);
+			setHealth (getHealth() - damage);
+			hurt = true;
+			attacking = false;
+			stateTime = 0;
+			velocity.y = 3;
+			
+			invincibleTime = INVINCIBLE_DURATION;
+		}
 	}
 	
 	
@@ -222,8 +248,6 @@ public class Hero extends Entity
 					if (e.isAlive () && getBounds().overlaps (e.getBounds()))
 					{
 						hurt (15);
-						
-						GameScreen.ft.show("-15", Color.RED, getX(), getY() + getHeight());
 					}
 				}
 			}
