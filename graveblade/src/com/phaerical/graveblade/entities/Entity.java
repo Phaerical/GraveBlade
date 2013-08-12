@@ -23,17 +23,25 @@ public abstract class Entity extends Actor
 	
 	boolean movingRight = false;
 	boolean movingLeft = false;
-	boolean jumping = false;
-	boolean falling = false;
 	boolean facingRight = true;
+	/*boolean jumping = false;
+	boolean falling = false;
 	boolean attacking = false;
 	boolean hurt = false;
+	boolean alive = true*/
+	
+	enum EntityState
+	{
+		MOVING, JUMPING, FALLING, HURT, DYING, ATTACKING, NONE
+	}
+	
+	private EntityState state;
+	private EntityState attackState;
 	
 	protected Vector2 velocity;
 	
 	private int maxHealth;
 	private int health;
-	private boolean alive;
 	
 	private Animation idleAnimation;
 	private Animation runAnimation;
@@ -57,7 +65,8 @@ public abstract class Entity extends Actor
 		this.map = map;
 		this.tiles = new Array<Rectangle> ();
 		
-		this.alive = true;
+		this.state = EntityState.MOVING;
+		this.attackState = EntityState.NONE;
 		this.stateTime = 0f;
 		this.spriteScale = 1;
 		this.speed = 1f;
@@ -67,6 +76,20 @@ public abstract class Entity extends Actor
 	public void setSpeed (float s)
 	{
 		speed = s;
+	}
+	
+	public EntityState getState ()
+	{
+		return state;
+	}
+	
+	public void setState (EntityState s)
+	{
+		state = s;
+		if (s != EntityState.MOVING)
+		{
+			stateTime = 0f;
+		}
 	}
 	
 	
@@ -174,13 +197,12 @@ public abstract class Entity extends Actor
 	public void die ()
 	{
 		SoundManager.play (SoundManager.DEATH);
-		stateTime = 0f;
-		alive = false;
+		setState (EntityState.DYING);
 	}
 	
 	public boolean isAlive ()
 	{
-		return alive;
+		return (state != EntityState.DYING);
 	}
 	
 	
@@ -198,21 +220,21 @@ public abstract class Entity extends Actor
 	@Override
 	public void act (float delta)
 	{
-		if (alive)
+		if (isAlive ())
 		{
 			super.act (delta);
 			
-			if (!hurt)
+			if (state != EntityState.HURT && state != EntityState.ATTACKING)
 			{
 				if (movingLeft)
 				{
-					if (!attacking)
+					if (state != EntityState.ATTACKING)
 						facingRight = false;
 					velocity.x = -speed;
 				}
 				else if (movingRight)
 				{
-					if (!attacking)
+					if (state != EntityState.ATTACKING)
 						facingRight = true;
 					velocity.x = speed;
 				}
@@ -221,103 +243,30 @@ public abstract class Entity extends Actor
 					velocity.x = 0;
 				}
 			}
+			else if (state == EntityState.HURT)
+			{
+				if (facingRight)
+				{
+					velocity.x = -3;
+					velocity.y = 1;
+				}
+				else
+				{
+					velocity.x = 3;
+					velocity.y = 1;
+				}
+			}
 			else
 			{
 				velocity.x = 0;
 			}
-
 			
-			if (!hurt)
+			
+			if (state != EntityState.HURT)
 			{
 				entityCollisionCheck ();
 			}
 			
-			
-			/*
-			float newX = getX () + velocity.x * delta;
-			float newY = getY () + velocity.y * delta;
-			
-			getCollisionTiles (tiles, newX, newY);
-			
-			boolean contactX, contactBottom, contactTop;
-			contactX = contactBottom = contactTop = true;
-
-			Vector2 leftUpperBound = new Vector2 (newX, newY + getHeight() * 2 / 3);
-			Vector2 leftLowerBound = new Vector2 (newX, newY + getHeight() / 3);
-			Vector2 rightUpperBound = new Vector2 (newX + getWidth(), newY + getHeight() * 2 / 3);
-			Vector2 rightLowerBound = new Vector2 (newX + getWidth(), newY + getHeight() / 3);
-			Vector2 upperLeftBound = new Vector2 (newX + getWidth() / 3, newY + getHeight());
-			Vector2 upperRightBound = new Vector2 (newX + getWidth() * 2 / 3, newY + getHeight());
-			Vector2 bottomLeftBound = new Vector2 (newX + getWidth() / 3, newY);
-			Vector2 bottomRightBound = new Vector2 (newX + getWidth() * 2 / 3, newY);
-			
-			for (int i = 0; i < 2 && (contactTop || contactBottom || contactX); i++)
-			{
-				contactTop = contactBottom = contactX = false;
-				
-				for (Rectangle r : tiles)
-				{
-					
-					while ((r.contains (leftUpperBound) || r.contains (leftLowerBound)) && velocity.x < 0)
-					{
-						setX (getX() + 0.01f);
-						leftUpperBound.x = getX() * velocity.x;
-						leftLowerBound.x = getX() * velocity.x;
-						contactX = true;
-					}
-					
-					while ((r.contains (upperLeftBound) || r.contains (upperRightBound)) && velocity.y > 0)
-					{
-						setY (getY() - 0.01f);
-						upperLeftBound.y = getY() + velocity.y * delta + getHeight();
-						upperRightBound.y = getY() + velocity.y * delta + getHeight();
-						contactTop = true;
-					}
-					
-					while ((r.contains (bottomLeftBound) || r.contains (bottomRightBound)) && velocity.y < 0)
-					{
-						setY (getY() + 0.01f);
-						bottomLeftBound.y = getY () + velocity.y * delta;
-						bottomRightBound.y = getY () + velocity.y * delta;
-						contactBottom = true;
-					}
-					
-					while ((r.contains (rightUpperBound) || r.contains(rightLowerBound)) && velocity.x > 0)
-					{
-						setX (getX() - 0.01f);
-						rightUpperBound.x = getX() * velocity.x + getWidth();
-						rightLowerBound.x = getX() * velocity.x + getWidth();
-						contactX = true;
-					}
-				}
-				
-				if (contactTop)
-				{
-					velocity.y = 0;
-				}
-				
-				if (contactBottom)
-				{
-					velocity.y = 0;
-					jumping = false;
-					falling = false;
-				}
-				
-				if (contactX)
-				{
-					velocity.x = 0;
-				}
-			}
-			
-			if (velocity.y < 0)
-			{
-				falling = true;
-			}
-			
-			velocity.add (0, GRAVITY);
-			
-			setPosition (getX () + velocity.x, getY () + velocity.y);*/
-			
 			float newX = getX () + velocity.x * delta;
 			float newY = getY () + velocity.y * delta;
 			
@@ -384,8 +333,11 @@ public abstract class Entity extends Actor
 				if (contactBottom)
 				{
 					velocity.y = 0;
-					jumping = false;
-					falling = false;
+					
+					if (state == EntityState.FALLING)
+					{
+						setState (EntityState.MOVING);
+					}
 				}
 				
 				if (contactX)
@@ -394,14 +346,30 @@ public abstract class Entity extends Actor
 				}
 			}
 			
-			if (velocity.y < 0)
+			if (velocity.y < 0 && state != EntityState.HURT)
 			{
-				falling = true;
+				setState (EntityState.FALLING);
 			}
 			
 			velocity.add (0, GRAVITY);
 			
 			setPosition (getX () + velocity.x, getY () + velocity.y);
+			
+		}
+		
+		if (getState() == EntityState.HURT && hurtAnimation.isAnimationFinished (stateTime))
+		{
+			setState (EntityState.MOVING);
+		}
+		
+		if (getState() == EntityState.ATTACKING && attackAnimation.isAnimationFinished (attackStateTime))
+		{
+			setState (EntityState.MOVING);
+		}
+		
+		if (getState() == EntityState.DYING && deathAnimation.isAnimationFinished (stateTime))
+		{
+			remove ();
 		}
 	}
 	
@@ -419,21 +387,23 @@ public abstract class Entity extends Actor
 	
 	public void attack ()
 	{
-		SoundManager.play (SoundManager.SWING);
-		attacking = true;
-		attackStateTime = 0f;
+		if (state == EntityState.MOVING)
+		{
+			SoundManager.play (SoundManager.SWING);
+			setState (EntityState.ATTACKING);
+			attackStateTime = 0f;
+		}
 	}
 	
 	public void hurt (int damage)
 	{
-		if (!hurt)
+		if (state != EntityState.HURT && state != EntityState.DYING)
 		{
 			SoundManager.play (SoundManager.HIT);
+			setState (EntityState.HURT);
+			
 			GameScreen.ft.show (String.valueOf (damage), Color.WHITE, getX(), getY() + getHeight() + 10);
 			setHealth (getHealth() - damage);
-			hurt = true;
-			attacking = false;
-			stateTime = 0;
 			velocity.y = 3;
 		}
 	}
@@ -446,7 +416,7 @@ public abstract class Entity extends Actor
 	
 	public Rectangle getAttackBounds ()
 	{
-		if (attacking)
+		if (state == EntityState.ATTACKING)
 		{
 			if (facingRight)
 			{
@@ -466,62 +436,39 @@ public abstract class Entity extends Actor
 	public void draw (SpriteBatch batch, float parentAlpha)
 	{	
 		stateTime += Gdx.graphics.getDeltaTime ();
-		TextureRegion frame;
+		TextureRegion frame = null;
 		
-		if (movingLeft || movingRight)
+		if (state == EntityState.MOVING)
 		{
-			frame = runAnimation.getKeyFrame (stateTime, true);
+			if (movingLeft || movingRight)
+			{
+				frame = runAnimation.getKeyFrame (stateTime, true);
+			}
+			else
+			{
+				frame = idleAnimation.getKeyFrame (stateTime, true);
+			}
 		}
-		else
-		{
-			frame = idleAnimation.getKeyFrame (stateTime, true);
-		}
-		
-		if (jumping)
+		else if (state == EntityState.JUMPING)
 		{
 			frame = jumpAnimation.getKeyFrame (stateTime, false);
 		}
-		else if (falling)
+		else if (state == EntityState.FALLING)
 		{
 			frame = jumpAnimation.getKeyFrame (1, false);
 		}
-		
-		if (attacking)
+		else if (state == EntityState.ATTACKING)
 		{
 			attackStateTime += Gdx.graphics.getDeltaTime ();
-			
-			if (attackAnimation.isAnimationFinished (attackStateTime))
-			{
-				attacking = false;
-			}
-			else
-			{
-				frame = attackAnimation.getKeyFrame (attackStateTime, false);
-			}
+			frame = attackAnimation.getKeyFrame (attackStateTime, false);
 		}
-		
-		if (hurt)
+		else if (state == EntityState.HURT)
 		{
-			if (hurtAnimation.isAnimationFinished (stateTime))
-			{
-				hurt = false;
-			}
-			else
-			{
-				frame = hurtAnimation.getKeyFrame (stateTime, false);
-			}
+			frame = hurtAnimation.getKeyFrame (stateTime, false);
 		}
-		
-		if (!alive)
+		else if (state == EntityState.DYING)
 		{
-			if (deathAnimation.isAnimationFinished (stateTime))
-			{
-				remove ();
-			}
-			else
-			{
-				frame = deathAnimation.getKeyFrame (stateTime, false);
-			}
+			frame = deathAnimation.getKeyFrame (stateTime, false);
 		}
 		
 		setSpriteColor (batch);
@@ -539,11 +486,11 @@ public abstract class Entity extends Actor
 
 	public void setSpriteColor (SpriteBatch batch)
 	{
-		if (!alive)
+		if (!isAlive ())
 		{
 			batch.setColor (1, 0, 0, Math.max (0, 1 - stateTime / deathAnimation.animationDuration));
 		}
-		else if (hurt)
+		else if (state == EntityState.HURT)
 		{
 			batch.setColor (Color.RED);
 		}

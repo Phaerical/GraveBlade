@@ -69,10 +69,6 @@ public class GameScreen extends BasicScreen
 		hero.setPosition(500, 200);
 		stage.addActor (hero);
 		
-		FrostPillar fp = new FrostPillar ();
-		fp.setPosition(500, 300);
-		stage.addActor(fp);
-		
 		for (int i = 0; i < 10; i++)
 		{
 			poring = new Poring (map);

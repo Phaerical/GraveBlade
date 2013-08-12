@@ -11,6 +11,7 @@ import com.phaerical.graveblade.ExperienceTable;
 import com.phaerical.graveblade.GraveBlade;
 import com.phaerical.graveblade.ScreenManager;
 import com.phaerical.graveblade.SoundManager;
+import com.phaerical.graveblade.entities.Entity.EntityState;
 import com.phaerical.graveblade.screens.GameScreen;
 
 public class Hero extends Entity
@@ -67,7 +68,7 @@ public class Hero extends Entity
 		this.setRunAnimation (new Animation (0.1f, atlas.createSprites ("run")));
 		this.setJumpAnimation (new Animation (0.15f, atlas.createSprites ("jump")));
 		this.setAttackAnimation (new Animation (0.1f, atlas.createSprites ("attack")));
-		this.setHurtAnimation (new Animation (0.7f, atlas.createSprites ("hurt")));
+		this.setHurtAnimation (new Animation (0.3f, atlas.createSprites ("hurt")));
 		this.setDeathAnimation (new Animation (0.7f, atlas.createSprites ("hurt")));
 	}
 	
@@ -124,28 +125,28 @@ public class Hero extends Entity
 	
 	public void jump ()
 	{
-		if (!jumping && !falling && !hurt)
+		if (getState() != EntityState.HURT && getState() != EntityState.JUMPING && getState() != EntityState.FALLING)
 		{
 			SoundManager.play (SoundManager.JUMP);
+			setState (EntityState.JUMPING);
 			velocity.y = JUMP_SPEED;
-			jumping = true;
-			stateTime = 0f;
 		}
 	}
 	
+	/*
 	public void attack ()
 	{
-		if (!attacking && !hurt)
+		if (getState() != EntityState.ATTACKING && getState() != EntityState.HURT)
 		{
 			SoundManager.play (SoundManager.SWING);
-			attacking = true;
+			setState (EntityState.ATTACKING);
 			attackStateTime = 0f;
 		}
-	}
+	}*/
 	
 	public Rectangle getAttackBounds ()
 	{
-		if (attacking && getAttackAnimation().getKeyFrameIndex (attackStateTime) == 2)
+		if (getState() == EntityState.ATTACKING && getAttackAnimation().getKeyFrameIndex (attackStateTime) == 2)
 		{
 			if (facingRight)
 			{
@@ -201,7 +202,7 @@ public class Hero extends Entity
 		{
 			batch.setColor (1, 0, 0, Math.max (0, 1 - stateTime / getDeathAnimation().animationDuration));
 		}
-		else if (hurt)
+		else if (getState () == EntityState.HURT)
 		{
 			batch.setColor (Color.RED);
 		}
@@ -215,19 +216,16 @@ public class Hero extends Entity
 		}
 	}
 	
-	
 	@Override
 	public void hurt (int damage)
 	{
-		if (!hurt)
+		if (getState() != EntityState.HURT && getState() != EntityState.DYING)
 		{
 			SoundManager.play (SoundManager.HIT);
+			setState (EntityState.HURT);
+			
 			GameScreen.ft.show ("-" + damage, Color.RED, getX(), getY() + getHeight() + 10);
 			setHealth (getHealth() - damage);
-			hurt = true;
-			attacking = false;
-			stateTime = 0;
-			velocity.y = 3;
 			
 			invincibleTime = INVINCIBLE_DURATION;
 		}
