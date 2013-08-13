@@ -14,7 +14,6 @@ import com.phaerical.graveblade.FloatingText;
 import com.phaerical.graveblade.GraveBlade;
 import com.phaerical.graveblade.PauseWindow;
 import com.phaerical.graveblade.StatusUI;
-import com.phaerical.graveblade.entities.FrostPillar;
 import com.phaerical.graveblade.entities.Hero;
 import com.phaerical.graveblade.entities.Mushroom;
 import com.phaerical.graveblade.entities.Poring;

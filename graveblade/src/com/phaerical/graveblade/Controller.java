@@ -1,6 +1,7 @@
 package com.phaerical.graveblade;
 
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.phaerical.graveblade.entities.EntityAction;
@@ -12,9 +13,6 @@ public class Controller extends InputListener
 {
 	private Hero hero;
 	private GameScreen screen;
-	
-	private EntityAction moveLeft = new EntityAction (ActionType.MOVE_LEFT);
-	private EntityAction moveRight = new EntityAction (ActionType.MOVE_RIGHT);
 	
 	public Controller (Hero hero, GameScreen screen)
 	{
@@ -28,17 +26,17 @@ public class Controller extends InputListener
 	{
 		if (keycode == Keys.UP)
 		{
-			hero.jump ();
+			hero.addEntityAction (ActionType.JUMP);
 		}
 		
 		if (keycode == Keys.LEFT)
 		{
-			hero.addAction (moveLeft);
+			hero.addEntityAction (ActionType.MOVE_LEFT);
 		}
 		
 		if (keycode == Keys.RIGHT)
 		{
-			hero.addAction (moveRight);
+			hero.addEntityAction (ActionType.MOVE_RIGHT);
 		}
 		
 		if (keycode == Keys.C)
@@ -71,14 +69,19 @@ public class Controller extends InputListener
 	{
 		if (keycode == Keys.LEFT)
 		{
-			hero.removeAction (moveLeft);
+			hero.removeEntityAction (ActionType.MOVE_LEFT);
 			hero.setVelocityX (0);
 		}
 		
 		if (keycode == Keys.RIGHT)
 		{
-			hero.removeAction (moveRight);
+			hero.removeEntityAction (ActionType.MOVE_RIGHT);
 			hero.setVelocityX (0);
+		}
+		
+		if (keycode == Keys.UP)
+		{
+			hero.removeEntityAction (ActionType.JUMP);
 		}
 		
 		return true;

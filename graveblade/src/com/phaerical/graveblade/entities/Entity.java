@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.phaerical.graveblade.SoundManager;
@@ -20,26 +21,16 @@ public abstract class Entity extends Actor
 {
 	final float GRAVITY = -0.3f;
 	
-	private float speed;
-	
-	boolean movingRight = false;
-	boolean movingLeft = false;
-	boolean facingRight = true;
-	/*boolean jumping = false;
-	boolean falling = false;
-	boolean attacking = false;
-	boolean hurt = false;
-	boolean alive = true*/
-	
 	enum EntityState
 	{
-		MOVING, JUMPING, FALLING, HURT, DYING, ATTACKING, NONE
+		MOVING, JUMPING, FALLING, HURT, DYING, ATTACKING
 	}
 	
 	private EntityState state;
-	private EntityState attackState;
 	
 	protected Vector2 velocity;
+	private float speed;
+	private float jumpSpeed;
 	
 	private int maxHealth;
 	private int health;
@@ -51,8 +42,9 @@ public abstract class Entity extends Actor
 	private Animation hurtAnimation;
 	private Animation deathAnimation;
 	
+	private boolean facingRight = true;
+	
 	protected float stateTime;
-	protected float attackStateTime;
 	
 	private TiledMap map;
 	private Array<Rectangle> tiles;
@@ -67,7 +59,6 @@ public abstract class Entity extends Actor
 		this.tiles = new Array<Rectangle> ();
 		
 		this.state = EntityState.MOVING;
-		this.attackState = EntityState.NONE;
 		this.stateTime = 0f;
 		this.spriteScale = 1;
 		this.speed = 1f;
@@ -79,9 +70,19 @@ public abstract class Entity extends Actor
 		return speed;
 	}
 	
+	public float getJumpSpeed ()
+	{
+		return jumpSpeed;
+	}
+	
 	public void setSpeed (float s)
 	{
 		speed = s;
+	}
+	
+	public void setJumpSpeed (float s)
+	{
+		jumpSpeed = s;
 	}
 	
 	public void setVelocityX (float x)
@@ -108,15 +109,44 @@ public abstract class Entity extends Actor
 		}
 	}
 	
+	public boolean isFacingRight ()
+	{
+		return facingRight;
+	}
+	
 	public void setFacingRight (boolean right)
 	{
-		if (right)
+		if (state != EntityState.ATTACKING)
 		{
-			facingRight = true;
+			if (right)
+			{
+				facingRight = true;
+			}
+			else
+			{
+				facingRight = false;
+			}
 		}
-		else
+	}
+	
+	public void addEntityAction (ActionType type)
+	{
+		addAction (new EntityAction (type));
+	}
+	
+	public void addEntityAction (ActionType type, float duration)
+	{
+		addAction (new EntityAction (type, duration));
+	}
+	
+	public void removeEntityAction (ActionType type)
+	{
+		for (Action a : getActions())
 		{
-			facingRight = false;
+			if (a.getClass() == EntityAction.class && ((EntityAction) a).getType() == type)
+			{
+				removeAction (a);
+			}
 		}
 	}
 	
@@ -226,6 +256,7 @@ public abstract class Entity extends Actor
 	{
 		SoundManager.play (SoundManager.DEATH);
 		setState (EntityState.DYING);
+		System.out.println ("lol");
 	}
 	
 	public boolean isAlive ()
@@ -255,6 +286,11 @@ public abstract class Entity extends Actor
 			if (state != EntityState.HURT)
 			{
 				entityCollisionCheck ();
+			}
+			
+			if (state == EntityState.ATTACKING)
+			{
+				velocity.x = 0;
 			}
 			
 			float newX = getX () + velocity.x * delta;
@@ -324,7 +360,7 @@ public abstract class Entity extends Actor
 				{
 					velocity.y = 0;
 					
-					if (state == EntityState.FALLING)
+					if (state == EntityState.FALLING || state == EntityState.JUMPING)
 					{
 						setState (EntityState.MOVING);
 					}
@@ -336,7 +372,7 @@ public abstract class Entity extends Actor
 				}
 			}
 			
-			if (velocity.y < 0 && state != EntityState.HURT)
+			if (velocity.y < 0 && state != EntityState.HURT && state != EntityState.DYING)
 			{
 				setState (EntityState.FALLING);
 			}
@@ -352,7 +388,7 @@ public abstract class Entity extends Actor
 			setState (EntityState.MOVING);
 		}
 		
-		if (getState() == EntityState.ATTACKING && attackAnimation.isAnimationFinished (attackStateTime))
+		if (getState() == EntityState.ATTACKING && attackAnimation.isAnimationFinished (stateTime))
 		{
 			setState (EntityState.MOVING);
 		}
@@ -369,7 +405,6 @@ public abstract class Entity extends Actor
 		{
 			SoundManager.play (SoundManager.SWING);
 			setState (EntityState.ATTACKING);
-			attackStateTime = 0f;
 		}
 	}
 	
@@ -382,7 +417,7 @@ public abstract class Entity extends Actor
 			
 			GameScreen.ft.show (String.valueOf (damage), Color.WHITE, getX(), getY() + getHeight() + 10);
 			setHealth (getHealth() - damage);
-			addAction (new EntityAction (ActionType.KNOCKBACK));
+			addEntityAction (ActionType.KNOCKBACK);
 		}
 	}
 	
@@ -437,8 +472,7 @@ public abstract class Entity extends Actor
 		}
 		else if (state == EntityState.ATTACKING)
 		{
-			attackStateTime += Gdx.graphics.getDeltaTime ();
-			frame = attackAnimation.getKeyFrame (attackStateTime, false);
+			frame = attackAnimation.getKeyFrame (stateTime, false);
 		}
 		else if (state == EntityState.HURT)
 		{

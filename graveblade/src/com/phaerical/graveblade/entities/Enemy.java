@@ -3,6 +3,7 @@ package com.phaerical.graveblade.entities;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.phaerical.graveblade.entities.EntityAction.ActionType;
 
 public class Enemy extends Entity
 {
@@ -14,7 +15,7 @@ public class Enemy extends Entity
 	{
 		super (map);
 		
-		this.ai = new ArtificialIntelligence ();
+		this.ai = new ArtificialIntelligence (this);
 	}
 	
 	@Override
@@ -22,9 +23,9 @@ public class Enemy extends Entity
 	{
 		super.act (delta);
 		
-		if (this.getActions().size == 0)
+		if (getActions().size == 0)
 		{
-			addAction (ai.getAction ());
+			ai.performAction ();
 		}
 	}
 	

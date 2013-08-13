@@ -12,11 +12,11 @@ import com.phaerical.graveblade.GraveBlade;
 import com.phaerical.graveblade.ScreenManager;
 import com.phaerical.graveblade.SoundManager;
 import com.phaerical.graveblade.entities.Entity.EntityState;
+import com.phaerical.graveblade.entities.EntityAction.ActionType;
 import com.phaerical.graveblade.screens.GameScreen;
 
 public class Hero extends Entity
 {
-	private float JUMP_SPEED = 15f;
 	private float INVINCIBLE_DURATION = 1.5f;
 	
 	private int level;
@@ -38,6 +38,7 @@ public class Hero extends Entity
 		this.game = game;
 		
 		this.setSpeed (8f);
+		this.setJumpSpeed (15f);
 		
 		this.invincibleTime = 0;
 		
@@ -71,7 +72,6 @@ public class Hero extends Entity
 		this.setHurtAnimation (new Animation (0.3f, atlas.createSprites ("hurt")));
 		this.setDeathAnimation (new Animation (0.7f, atlas.createSprites ("hurt")));
 	}
-	
 	
 	public int getDamage ()
 	{
@@ -123,16 +123,6 @@ public class Hero extends Entity
 		return maxExp;
 	}
 	
-	public void jump ()
-	{
-		if (getState() != EntityState.HURT && getState() != EntityState.JUMPING && getState() != EntityState.FALLING)
-		{
-			SoundManager.play (SoundManager.JUMP);
-			setState (EntityState.JUMPING);
-			velocity.y = JUMP_SPEED;
-		}
-	}
-	
 	/*
 	public void attack ()
 	{
@@ -146,9 +136,9 @@ public class Hero extends Entity
 	
 	public Rectangle getAttackBounds ()
 	{
-		if (getState() == EntityState.ATTACKING && getAttackAnimation().getKeyFrameIndex (attackStateTime) == 2)
+		if (getState() == EntityState.ATTACKING && getAttackAnimation().getKeyFrameIndex (stateTime) == 2)
 		{
-			if (facingRight)
+			if (isFacingRight ())
 			{
 				return new Rectangle (getX() + getWidth(), getY(), 80, 80);
 			}
@@ -166,7 +156,7 @@ public class Hero extends Entity
 	{
 		FrostPillar fp = new FrostPillar ();
 		
-		if (facingRight)
+		if (isFacingRight ())
 		{
 			fp.setPosition (getX()+100, getY());
 		}
@@ -226,6 +216,7 @@ public class Hero extends Entity
 			
 			GameScreen.ft.show ("-" + damage, Color.RED, getX(), getY() + getHeight() + 10);
 			setHealth (getHealth() - damage);
+			addEntityAction (ActionType.KNOCKBACK);
 			
 			invincibleTime = INVINCIBLE_DURATION;
 		}
