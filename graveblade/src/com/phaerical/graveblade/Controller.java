@@ -3,6 +3,8 @@ package com.phaerical.graveblade;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.phaerical.graveblade.entities.EntityAction;
+import com.phaerical.graveblade.entities.EntityAction.ActionType;
 import com.phaerical.graveblade.entities.Hero;
 import com.phaerical.graveblade.screens.GameScreen;
 
@@ -10,6 +12,9 @@ public class Controller extends InputListener
 {
 	private Hero hero;
 	private GameScreen screen;
+	
+	private EntityAction moveLeft = new EntityAction (ActionType.MOVE_LEFT);
+	private EntityAction moveRight = new EntityAction (ActionType.MOVE_RIGHT);
 	
 	public Controller (Hero hero, GameScreen screen)
 	{
@@ -28,12 +33,12 @@ public class Controller extends InputListener
 		
 		if (keycode == Keys.LEFT)
 		{
-			hero.moveLeft (true);
+			hero.addAction (moveLeft);
 		}
 		
 		if (keycode == Keys.RIGHT)
 		{
-			hero.moveRight (true);
+			hero.addAction (moveRight);
 		}
 		
 		if (keycode == Keys.C)
@@ -66,12 +71,14 @@ public class Controller extends InputListener
 	{
 		if (keycode == Keys.LEFT)
 		{
-			hero.moveLeft (false);
+			hero.removeAction (moveLeft);
+			hero.setVelocityX (0);
 		}
 		
 		if (keycode == Keys.RIGHT)
 		{
-			hero.moveRight (false);
+			hero.removeAction (moveRight);
+			hero.setVelocityX (0);
 		}
 		
 		return true;

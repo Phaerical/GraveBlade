@@ -1,18 +1,20 @@
 package com.phaerical.graveblade.entities;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.phaerical.graveblade.screens.GameScreen;
 
 public class Enemy extends Entity
 {
 	private int exp;
 	
+	private ArtificialIntelligence ai;
+	
 	public Enemy (TiledMap map)
 	{
 		super (map);
+		
+		this.ai = new ArtificialIntelligence ();
 	}
 	
 	@Override
@@ -22,16 +24,7 @@ public class Enemy extends Entity
 		
 		if (this.getActions().size == 0)
 		{
-			double random = Math.random ();
-			
-			if (random < 0.005)
-			{
-				this.addAction (new EnemyAction (EnemyAction.Type.MOVE_LEFT, 2f));
-			}
-			else if (random < 0.01)
-			{
-				this.addAction (new EnemyAction (EnemyAction.Type.MOVE_RIGHT, 2f));
-			}
+			addAction (ai.getAction ());
 		}
 	}
 	

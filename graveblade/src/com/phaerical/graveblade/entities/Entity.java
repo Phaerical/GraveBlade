@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.phaerical.graveblade.SoundManager;
+import com.phaerical.graveblade.entities.EntityAction.ActionType;
 import com.phaerical.graveblade.screens.GameScreen;
 
 public abstract class Entity extends Actor
@@ -73,9 +74,24 @@ public abstract class Entity extends Actor
 	}
 	
 	
+	public float getSpeed ()
+	{
+		return speed;
+	}
+	
 	public void setSpeed (float s)
 	{
 		speed = s;
+	}
+	
+	public void setVelocityX (float x)
+	{
+		velocity.x = x;
+	}
+	
+	public void setVelocityY (float y)
+	{
+		velocity.y = y;
 	}
 	
 	public EntityState getState ()
@@ -89,6 +105,18 @@ public abstract class Entity extends Actor
 		if (s != EntityState.MOVING)
 		{
 			stateTime = 0f;
+		}
+	}
+	
+	public void setFacingRight (boolean right)
+	{
+		if (right)
+		{
+			facingRight = true;
+		}
+		else
+		{
+			facingRight = false;
 		}
 	}
 	
@@ -224,44 +252,6 @@ public abstract class Entity extends Actor
 		{
 			super.act (delta);
 			
-			if (state != EntityState.HURT && state != EntityState.ATTACKING)
-			{
-				if (movingLeft)
-				{
-					if (state != EntityState.ATTACKING)
-						facingRight = false;
-					velocity.x = -speed;
-				}
-				else if (movingRight)
-				{
-					if (state != EntityState.ATTACKING)
-						facingRight = true;
-					velocity.x = speed;
-				}
-				else
-				{
-					velocity.x = 0;
-				}
-			}
-			else if (state == EntityState.HURT)
-			{
-				if (facingRight)
-				{
-					velocity.x = -3;
-					velocity.y = 1;
-				}
-				else
-				{
-					velocity.x = 3;
-					velocity.y = 1;
-				}
-			}
-			else
-			{
-				velocity.x = 0;
-			}
-			
-			
 			if (state != EntityState.HURT)
 			{
 				entityCollisionCheck ();
@@ -373,18 +363,6 @@ public abstract class Entity extends Actor
 		}
 	}
 	
-	
-	public void moveLeft (boolean move)
-	{
-		movingLeft = move;
-	}
-	
-	
-	public void moveRight (boolean move)
-	{
-		movingRight = move;
-	}
-	
 	public void attack ()
 	{
 		if (state == EntityState.MOVING)
@@ -404,7 +382,7 @@ public abstract class Entity extends Actor
 			
 			GameScreen.ft.show (String.valueOf (damage), Color.WHITE, getX(), getY() + getHeight() + 10);
 			setHealth (getHealth() - damage);
-			velocity.y = 3;
+			addAction (new EntityAction (ActionType.KNOCKBACK));
 		}
 	}
 	
@@ -440,7 +418,7 @@ public abstract class Entity extends Actor
 		
 		if (state == EntityState.MOVING)
 		{
-			if (movingLeft || movingRight)
+			if (velocity.x != 0)
 			{
 				frame = runAnimation.getKeyFrame (stateTime, true);
 			}

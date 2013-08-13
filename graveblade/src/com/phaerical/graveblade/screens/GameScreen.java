@@ -69,6 +69,7 @@ public class GameScreen extends BasicScreen
 		hero.setPosition(500, 200);
 		stage.addActor (hero);
 		
+		
 		for (int i = 0; i < 10; i++)
 		{
 			poring = new Poring (map);
@@ -80,7 +81,7 @@ public class GameScreen extends BasicScreen
 		{
 			mushroom = new Mushroom (map);
 			mushroom.setPosition (400 + 100 * i, 600);
-			stage.addActor (mushroom);
+			//stage.addActor (mushroom);
 		}
 		
 		controller = new Controller (hero, this);
