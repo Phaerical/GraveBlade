@@ -35,6 +35,10 @@ public abstract class Entity extends Actor
 	private int maxHealth;
 	private int health;
 	
+	private int strength;
+	private int defence;
+	private int vitality;
+	
 	private Animation idleAnimation;
 	private Animation runAnimation;
 	private Animation jumpAnimation;
@@ -65,19 +69,53 @@ public abstract class Entity extends Actor
 	}
 	
 	
+	/**************************************
+	 * ATTRIBUTES METHODS
+	 **************************************/
+	
+	public int getStrength ()
+	{
+		return strength;
+	}
+	
+	public void setStrength (int str)
+	{
+		strength = str;
+	}
+	
+	public int getDefence ()
+	{
+		return defence;
+	}
+	
+	public void setDefence (int def)
+	{
+		defence = def;
+	}
+	
+	public int getVitality ()
+	{
+		return vitality;
+	}
+	
+	public void setVitality (int vit)
+	{
+		vitality = vit;
+	}
+	
 	public float getSpeed ()
 	{
 		return speed;
 	}
 	
-	public float getJumpSpeed ()
-	{
-		return jumpSpeed;
-	}
-	
 	public void setSpeed (float s)
 	{
 		speed = s;
+	}
+	
+	public float getJumpSpeed ()
+	{
+		return jumpSpeed;
 	}
 	
 	public void setJumpSpeed (float s)
@@ -94,6 +132,11 @@ public abstract class Entity extends Actor
 	{
 		velocity.y = y;
 	}
+	
+	
+	/**************************************
+	 * STATE METHODS
+	 **************************************/
 	
 	public EntityState getState ()
 	{
@@ -256,7 +299,6 @@ public abstract class Entity extends Actor
 	{
 		SoundManager.play (SoundManager.DEATH);
 		setState (EntityState.DYING);
-		System.out.println ("lol");
 	}
 	
 	public boolean isAlive ()
@@ -264,12 +306,10 @@ public abstract class Entity extends Actor
 		return (state != EntityState.DYING);
 	}
 	
-	
 	public void setSpriteScale (float scale)
 	{
 		spriteScale = scale;
 	}
-	
 	
 
 	/**************************************
@@ -483,7 +523,9 @@ public abstract class Entity extends Actor
 			frame = deathAnimation.getKeyFrame (stateTime, false);
 		}
 		
-		setSpriteColor (batch);
+		setColor (Color.WHITE);
+		setSpriteColor ();
+		batch.setColor (getColor ());
 		
 		if (facingRight)
 		{
@@ -496,19 +538,15 @@ public abstract class Entity extends Actor
 	}
 	
 
-	public void setSpriteColor (SpriteBatch batch)
+	public void setSpriteColor ()
 	{
 		if (!isAlive ())
 		{
-			batch.setColor (1, 0, 0, Math.max (0, 1 - stateTime / deathAnimation.animationDuration));
+			setColor (1, 0, 0, Math.max (0, 1 - stateTime / deathAnimation.animationDuration));
 		}
 		else if (state == EntityState.HURT)
 		{
-			batch.setColor (Color.RED);
-		}
-		else
-		{
-			batch.setColor (Color.WHITE);
+			setColor (Color.RED);
 		}
 	}
 	

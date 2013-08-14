@@ -186,24 +186,23 @@ public class Hero extends Entity
 	
 	
 	@Override
-	public void setSpriteColor (SpriteBatch batch)
+	public void setSpriteColor ()
 	{
-		if (!isAlive ())
+		for (int i = 0; i < 10; i += 2)
 		{
-			batch.setColor (1, 0, 0, Math.max (0, 1 - stateTime / getDeathAnimation().animationDuration));
+			if (invincibleTime > INVINCIBLE_DURATION * i / 10 &&
+				invincibleTime < INVINCIBLE_DURATION * (i + 1) / 10)
+			{
+				setColor (Color.LIGHT_GRAY);
+				break;
+			}
+			else
+			{
+				setColor (Color.WHITE);
+			}
 		}
-		else if (getState () == EntityState.HURT)
-		{
-			batch.setColor (Color.RED);
-		}
-		else if (invincibleTime > 0)
-		{
-			batch.setColor (Color.LIGHT_GRAY);
-		}
-		else
-		{
-			batch.setColor (Color.WHITE);
-		}
+		
+		super.setSpriteColor ();
 	}
 	
 	@Override
