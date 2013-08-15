@@ -5,6 +5,8 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -13,6 +15,7 @@ import com.phaerical.graveblade.Controller;
 import com.phaerical.graveblade.FloatingText;
 import com.phaerical.graveblade.GraveBlade;
 import com.phaerical.graveblade.PauseWindow;
+import com.phaerical.graveblade.StatsWindow;
 import com.phaerical.graveblade.StatusUI;
 import com.phaerical.graveblade.entities.Hero;
 import com.phaerical.graveblade.entities.Mushroom;
@@ -24,6 +27,8 @@ public class GameScreen extends BasicScreen
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
 	
+	private ShapeRenderer shape = new ShapeRenderer ();
+	
 	private Controller controller;
 	
 	private GraveBlade game;
@@ -31,6 +36,7 @@ public class GameScreen extends BasicScreen
 	private Stage ui;
 	
 	private PauseWindow pauseWindow;
+	private StatsWindow statsWindow;
 	
 	public static FloatingText ft;
 	
@@ -40,7 +46,7 @@ public class GameScreen extends BasicScreen
 	
 	public enum State
 	{
-		PAUSED, RUNNING;
+		PAUSED, RUNNING, VIEW_WINDOW;
 	}
 	
 	public State state;
@@ -92,9 +98,11 @@ public class GameScreen extends BasicScreen
 		StatusUI status = new StatusUI (hero);
 		ui.addActor (status);
 		
-		
 		pauseWindow = new PauseWindow (game);
 		ui.addActor (pauseWindow);
+		
+		statsWindow = new StatsWindow ();
+		ui.addActor (statsWindow);
 		
 		ft = new FloatingText ();
 		stage.addActor (ft);
@@ -105,14 +113,34 @@ public class GameScreen extends BasicScreen
 	}
 	
 	
+	public void triggerStatsWindow ()
+	{
+		if (statsWindow.isOpen ())
+		{
+			statsWindow.hide ();
+			state = State.RUNNING;
+		}
+		else
+		{
+			statsWindow.show ();
+			state = State.VIEW_WINDOW;
+		}
+	}
+	
+	
 	@Override
 	public void render (float delta)
 	{
 		ui.act (delta);
 		
-		if (state == State.RUNNING)
+		if (state == State.PAUSED)
+		{
+			pauseWindow.setVisible (true);
+		}
+		else
 		{
 			pauseWindow.setVisible (false);
+			
 			stage.act (delta);
 			
 			if (!stage.getActors().contains (hero, false))
@@ -160,13 +188,26 @@ public class GameScreen extends BasicScreen
 			stage.draw ();
 			
 		}
-		else if (state == State.PAUSED)
+		
+
+		
+		if (state == State.VIEW_WINDOW || state == State.PAUSED)
 		{
-			pauseWindow.setVisible (true);
+		    tintScreen ();
 		}
 		
 		ui.draw ();
-		
-		
+	}
+	
+	
+	public void tintScreen ()
+	{
+		Gdx.gl.glEnable (GL20.GL_BLEND);
+	    Gdx.gl.glBlendFunc (GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		shape.begin (ShapeType.Filled);
+		shape.setColor (0, 0, 0, 0.8f);
+		shape.rect (0, 0, 1024, 576);
+		shape.end ();
+		Gdx.gl.glDisable (GL20.GL_BLEND);
 	}
 }

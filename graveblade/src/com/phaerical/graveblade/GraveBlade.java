@@ -3,6 +3,7 @@ package com.phaerical.graveblade;
 import com.badlogic.gdx.Game;
 import com.phaerical.graveblade.screens.GameScreen;
 import com.phaerical.graveblade.screens.SplashScreen;
+import com.phaerical.graveblade.screens.TestScreen;
 
 public class GraveBlade extends Game
 {
@@ -16,6 +17,7 @@ public class GraveBlade extends Game
 		
 		//setScreen (new SplashScreen (this));
 		setScreen (new GameScreen (this));
+		//setScreen (new TestScreen (this));
 	}
 	
 	

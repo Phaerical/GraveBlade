@@ -1,10 +1,8 @@
 package com.phaerical.graveblade;
 
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.phaerical.graveblade.entities.EntityAction;
 import com.phaerical.graveblade.entities.EntityAction.ActionType;
 import com.phaerical.graveblade.entities.Hero;
 import com.phaerical.graveblade.screens.GameScreen;
@@ -58,6 +56,11 @@ public class Controller extends InputListener
 		{
 			screen.state = (screen.state == GameScreen.State.PAUSED)
 					? GameScreen.State.RUNNING : GameScreen.State.PAUSED; 
+		}
+		
+		if (keycode == Keys.U)
+		{
+			screen.triggerStatsWindow ();
 		}
 		
 		return true;
