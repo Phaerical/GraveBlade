@@ -123,17 +123,6 @@ public class Hero extends Entity
 		return maxExp;
 	}
 	
-	/*
-	public void attack ()
-	{
-		if (getState() != EntityState.ATTACKING && getState() != EntityState.HURT)
-		{
-			SoundManager.play (SoundManager.SWING);
-			setState (EntityState.ATTACKING);
-			attackStateTime = 0f;
-		}
-	}*/
-	
 	public Rectangle getAttackBounds ()
 	{
 		if (getState() == EntityState.ATTACKING && getAttackAnimation().getKeyFrameIndex (stateTime) == 2)
@@ -188,17 +177,20 @@ public class Hero extends Entity
 	@Override
 	public void setSpriteColor ()
 	{
-		for (int i = 0; i < 10; i += 2)
+		if (invincibleTime > 0)
 		{
-			if (invincibleTime > INVINCIBLE_DURATION * i / 10 &&
-				invincibleTime < INVINCIBLE_DURATION * (i + 1) / 10)
+			for (int i = 0; i < 10; i += 2)
 			{
-				setColor (Color.LIGHT_GRAY);
-				break;
-			}
-			else
-			{
-				setColor (Color.WHITE);
+				if (invincibleTime > INVINCIBLE_DURATION * i / 10 &&
+					invincibleTime < INVINCIBLE_DURATION * (i + 1) / 10)
+				{
+					setColor (0.6f, 0.6f, 0.6f, 0.7f);
+					break;
+				}
+				else
+				{
+					setColor (1, 1, 1, 0.7f);
+				}
 			}
 		}
 		
@@ -210,14 +202,28 @@ public class Hero extends Entity
 	{
 		if (getState() != EntityState.HURT && getState() != EntityState.DYING)
 		{
-			SoundManager.play (SoundManager.HIT);
-			setState (EntityState.HURT);
-			
 			GameScreen.ft.show ("-" + damage, Color.RED, getX(), getY() + getHeight() + 10);
 			setHealth (getHealth() - damage);
-			addEntityAction (ActionType.KNOCKBACK);
+			addEntityAction (ActionType.KNOCKBACK_RIGHT);
 			
 			invincibleTime = INVINCIBLE_DURATION;
+		}
+	}
+	
+	
+	public void hitTarget (Enemy enemy, int damage)
+	{
+		GameScreen.ft.show (String.valueOf (damage), Color.WHITE, enemy.getX(), enemy.getY() + getHeight() + 10);
+		
+		enemy.setHealth (enemy.getHealth() - damage);
+		
+		if (getX() < enemy.getX())
+		{
+			enemy.addEntityAction (ActionType.KNOCKBACK_RIGHT);
+		}
+		else
+		{
+			enemy.addEntityAction (ActionType.KNOCKBACK_LEFT);
 		}
 	}
 	

@@ -8,7 +8,7 @@ public class EntityAction extends Action
 {
 	public enum ActionType
 	{
-		STAND, MOVE_LEFT, MOVE_RIGHT, JUMP, KNOCKBACK;
+		STAND, MOVE_LEFT, MOVE_RIGHT, JUMP, KNOCKBACK_LEFT, KNOCKBACK_RIGHT;
 	}
 	
 	private Entity entity;
@@ -56,9 +56,17 @@ public class EntityAction extends Action
 			entity.setState (EntityState.JUMPING);
 			speed = entity.getJumpSpeed () / 3;
 		}
-		else if (type == ActionType.KNOCKBACK)
+		else if (type == ActionType.KNOCKBACK_LEFT)
 		{
-			speed = entity.getSpeed ();
+			SoundManager.play (SoundManager.HIT);
+			entity.setState (EntityState.HURT);
+			speed = -entity.getSpeed () * 10;
+		}
+		else if (type == ActionType.KNOCKBACK_RIGHT)
+		{
+			SoundManager.play (SoundManager.HIT);
+			entity.setState (EntityState.HURT);
+			speed = entity.getSpeed () * 10;
 		}
 	}
 	
@@ -116,9 +124,9 @@ public class EntityAction extends Action
 			
 			speed *= 0.7f;
 		}
-		else if (type == ActionType.KNOCKBACK)
+		else if (type == ActionType.KNOCKBACK_LEFT || type == ActionType.KNOCKBACK_RIGHT)
 		{
-			if (speed < 0.2f)
+			if (Math.abs (speed) < 0.2f)
 			{
 				entity.setVelocityX (0);
 				entity.setVelocityY (0);
@@ -126,7 +134,6 @@ public class EntityAction extends Action
 			}
 			
 			entity.velocity.x = speed;
-			entity.velocity.y = 2f;
 			
 			speed *= 0.5f;
 		}

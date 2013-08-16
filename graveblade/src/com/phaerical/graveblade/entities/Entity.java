@@ -452,12 +452,10 @@ public abstract class Entity extends Actor
 	{
 		if (state != EntityState.HURT && state != EntityState.DYING)
 		{
-			SoundManager.play (SoundManager.HIT);
-			setState (EntityState.HURT);
-			
+			addEntityAction (ActionType.KNOCKBACK_LEFT);
 			GameScreen.ft.show (String.valueOf (damage), Color.WHITE, getX(), getY() + getHeight() + 10);
 			setHealth (getHealth() - damage);
-			addEntityAction (ActionType.KNOCKBACK);
+			
 		}
 	}
 	
@@ -546,7 +544,7 @@ public abstract class Entity extends Actor
 		}
 		else if (state == EntityState.HURT)
 		{
-			setColor (Color.RED);
+			setColor (0.9f, 0.2f, 0, 1);
 		}
 	}
 	
