@@ -28,11 +28,12 @@ public class StatsWindow extends Table
 		
 		Texture.setEnforcePotImages(false);
 		
-		NinePatch np = new NinePatch (new Texture ("assets/backgrounds/window.png"), 15, 15, 15, 15);
+		NinePatch np = new NinePatch (new Texture ("assets/backgrounds/window4.png"), 16, 16, 16, 16);
 		NinePatchDrawable npd = new NinePatchDrawable (np);
 		
-		setSize (265, 350);
-		setPosition (-getWidth(), 100);
+		//setSize (265, 390);
+		setSize (800, 390);
+		setPosition (-getWidth(), 80);
 		setBackground (npd);
 		
 		Label lblLevel = new Label ("LEVEL", skin, "small");
@@ -68,20 +69,21 @@ public class StatsWindow extends Table
 		add (lblAttackDamage).align (Align.left);
 		add (lblHeroAttackDamage).align (Align.right).row ();
 		
-		padBottom (35);
-		padLeft (25);
-		padRight (25);
+		padTop (60);
+		padBottom (85);
+		padLeft (75);
+		padRight (75);
 	}
 	
 	public void show ()
 	{
-		addAction (Actions.moveTo (100, 100, 0.15f));
+		addAction (Actions.moveTo (100, 80, 0.15f));
 		open = true;
 	}
 	
 	public void hide ()
 	{
-		addAction (Actions.moveTo (-getWidth(), 100, 0.15f));
+		addAction (Actions.moveTo (-getWidth(), 80, 0.15f));
 		open = false;
 	}
 	

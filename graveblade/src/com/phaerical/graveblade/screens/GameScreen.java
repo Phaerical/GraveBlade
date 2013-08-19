@@ -16,6 +16,7 @@ import com.phaerical.graveblade.FloatingText;
 import com.phaerical.graveblade.GraveBlade;
 import com.phaerical.graveblade.PauseWindow;
 import com.phaerical.graveblade.StatsWindow;
+import com.phaerical.graveblade.StatusBar;
 import com.phaerical.graveblade.StatusUI;
 import com.phaerical.graveblade.entities.Hero;
 import com.phaerical.graveblade.entities.Mushroom;
@@ -95,7 +96,7 @@ public class GameScreen extends BasicScreen
 		
 		ui = new Stage ();
 		
-		StatusUI status = new StatusUI (hero);
+		StatusBar status = new StatusBar (hero);
 		ui.addActor (status);
 		
 		pauseWindow = new PauseWindow (game);
@@ -193,7 +194,7 @@ public class GameScreen extends BasicScreen
 		
 		if (state == State.VIEW_WINDOW || state == State.PAUSED)
 		{
-		    tintScreen ();
+		    //tintScreen ();
 		}
 		
 		ui.draw ();

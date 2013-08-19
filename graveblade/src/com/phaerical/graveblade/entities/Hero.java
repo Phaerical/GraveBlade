@@ -47,7 +47,7 @@ public class Hero extends Entity
 		this.setHealth (100);
 		this.setName ("hero");
 		
-		this.damage = 1;
+		this.damage = 10000;
 		this.critChance = 10;
 		this.critDamageMultiplier = 2;
 		
