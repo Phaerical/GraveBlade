@@ -47,7 +47,7 @@ public class Hero extends Entity
 		this.setHealth (100);
 		this.setName ("hero");
 		
-		this.damage = 10000;
+		this.damage = 5;
 		this.critChance = 10;
 		this.critDamageMultiplier = 2;
 		
@@ -241,7 +241,9 @@ public class Hero extends Entity
 					
 					if (e.isAlive () && getBounds().overlaps (e.getBounds()))
 					{
-						hurt (15);
+						hurt (5);
+						
+						break;
 					}
 				}
 			}

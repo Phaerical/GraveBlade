@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.phaerical.graveblade.Controller;
 import com.phaerical.graveblade.FloatingText;
 import com.phaerical.graveblade.GraveBlade;
@@ -45,6 +46,8 @@ public class GameScreen extends BasicScreen
 	private Poring poring;
 	private Mushroom mushroom;
 	
+	Texture background;
+	
 	public enum State
 	{
 		PAUSED, RUNNING, VIEW_WINDOW;
@@ -65,7 +68,9 @@ public class GameScreen extends BasicScreen
 	{
 		Texture.setEnforcePotImages (false);
 		
-		map = new TmxMapLoader().load ("assets/maps/map2.tmx");
+		background = new Texture ("assets/backgrounds/forest.png");
+		
+		map = new TmxMapLoader().load ("assets/maps/test-map.tmx");
 		renderer = new OrthogonalTiledMapRenderer (map);
 		
 		camera = new OrthographicCamera ();
@@ -80,14 +85,14 @@ public class GameScreen extends BasicScreen
 		{
 			poring = new Poring (map);
 			poring.setPosition (400 + 100 * i, 200);
-			stage.addActor (poring);
+			//stage.addActor (poring);
 		}
 		
 		for (int i = 0; i < 10; i++)
 		{
 			mushroom = new Mushroom (map);
-			mushroom.setPosition (400 + 100 * i, 600);
-			//stage.addActor (mushroom);
+			mushroom.setPosition (400 + 100 * i, 400);
+			stage.addActor (mushroom);
 		}
 		
 		controller = new Controller (hero, this);
@@ -107,6 +112,8 @@ public class GameScreen extends BasicScreen
 		
 		ft = new FloatingText ();
 		stage.addActor (ft);
+		
+
 		
 		InputMultiplexer im = new InputMultiplexer (stage, ui);
 		
@@ -182,19 +189,21 @@ public class GameScreen extends BasicScreen
 			camera.position.y += tY * lerp;
 			camera.update ();
 			
+			
+			ui.getSpriteBatch().begin ();
+			ui.getSpriteBatch().draw (background, 0, 0);
+			ui.getSpriteBatch().end ();
+			
 			renderer.setView (camera);
 			renderer.render ();
 			
 			stage.setCamera(camera);
 			stage.draw ();
-			
 		}
 		
-
-		
-		if (state == State.VIEW_WINDOW || state == State.PAUSED)
+		if (state == State.PAUSED)
 		{
-		    //tintScreen ();
+		    tintScreen ();
 		}
 		
 		ui.draw ();

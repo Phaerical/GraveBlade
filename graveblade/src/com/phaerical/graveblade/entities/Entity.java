@@ -356,7 +356,6 @@ public abstract class Entity extends Actor
 				
 				for (Rectangle r : tiles)
 				{
-					
 					while ((r.contains (leftUpperBound) || r.contains (leftLowerBound)) && velocity.x < 0)
 					{
 						setX (getX() + 0.01f);
@@ -364,7 +363,6 @@ public abstract class Entity extends Actor
 						leftLowerBound.x = getX() * velocity.x;
 						contactX = true;
 					}
-					
 					
 					while ((r.contains (upperLeftBound) || r.contains (upperRightBound)) && velocity.y > 0)
 					{
@@ -564,7 +562,8 @@ public abstract class Entity extends Actor
 			{
 				Cell cell = layer.getCell (x, y);
 				
-				if (cell != null && cell.getTile().getProperties().containsKey("blocked"))
+				if (cell != null && cell.getTile().getProperties().containsKey("blocked") ||
+						x < 0 || y < 0 || x > layer.getWidth() - 1 || y > layer.getHeight())
 				{
 					tiles.add (new Rectangle (x * map.getProperties().get("tilewidth", Integer.class),
 							y * map.getProperties().get("tileheight", Integer.class),
