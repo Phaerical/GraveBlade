@@ -21,7 +21,7 @@ public class FrostPillar extends Actor
 		this.setY (0);
 		this.setBounds (getX (), getY (), getWidth (), getHeight ());
 		
-		TextureAtlas atlas = new TextureAtlas ("assets/sprites/frost_pillar.pack");
+		TextureAtlas atlas = new TextureAtlas (Gdx.files.internal ("sprites/frost_pillar.pack"));
 		this.spellAnimation = new Animation (0.12f, atlas.createSprites ("spell"));
 		this.stateTime = 0f;
 	}

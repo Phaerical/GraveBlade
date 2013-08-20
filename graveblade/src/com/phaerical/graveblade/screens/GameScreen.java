@@ -68,9 +68,9 @@ public class GameScreen extends BasicScreen
 	{
 		Texture.setEnforcePotImages (false);
 		
-		background = new Texture ("assets/backgrounds/forest.png");
+		background = new Texture (Gdx.files.internal ("backgrounds/forest.png"));
 		
-		map = new TmxMapLoader().load ("assets/maps/test-map.tmx");
+		map = new TmxMapLoader().load (Gdx.files.internal ("maps/test-map.tmx").path ());
 		renderer = new OrthogonalTiledMapRenderer (map);
 		
 		camera = new OrthographicCamera ();
@@ -81,14 +81,14 @@ public class GameScreen extends BasicScreen
 		stage.addActor (hero);
 		
 		
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 5; i++)
 		{
 			poring = new Poring (map);
 			poring.setPosition (400 + 100 * i, 200);
 			//stage.addActor (poring);
 		}
 		
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 5; i++)
 		{
 			mushroom = new Mushroom (map);
 			mushroom.setPosition (400 + 100 * i, 400);
@@ -112,8 +112,6 @@ public class GameScreen extends BasicScreen
 		
 		ft = new FloatingText ();
 		stage.addActor (ft);
-		
-
 		
 		InputMultiplexer im = new InputMultiplexer (stage, ui);
 		
@@ -188,7 +186,6 @@ public class GameScreen extends BasicScreen
 			camera.position.x += tX * lerp;
 			camera.position.y += tY * lerp;
 			camera.update ();
-			
 			
 			ui.getSpriteBatch().begin ();
 			ui.getSpriteBatch().draw (background, 0, 0);

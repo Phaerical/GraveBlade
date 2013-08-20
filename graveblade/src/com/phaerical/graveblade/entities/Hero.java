@@ -1,5 +1,6 @@
 package com.phaerical.graveblade.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -64,7 +65,7 @@ public class Hero extends Entity
 		this.setSpriteScale (2);
 		
 		// ANIMATIONS
-		TextureAtlas atlas = new TextureAtlas ("assets/sprites/zero.pack");
+		TextureAtlas atlas = new TextureAtlas (Gdx.files.internal ("sprites/zero.pack"));
 		this.setIdleAnimation (new Animation (0.3f, atlas.createSprites ("idle")));
 		this.setRunAnimation (new Animation (0.1f, atlas.createSprites ("run")));
 		this.setJumpAnimation (new Animation (0.15f, atlas.createSprites ("jump")));
@@ -211,19 +212,33 @@ public class Hero extends Entity
 	}
 	
 	
+	public void setInvincible ()
+	{
+		invincibleTime = INVINCIBLE_DURATION;
+	}
+	
+	public boolean isInvincible ()
+	{
+		return (invincibleTime != 0);
+	}
+	
+	
 	public void hitTarget (Enemy enemy, int damage)
 	{
-		GameScreen.ft.show (String.valueOf (damage), Color.WHITE, enemy.getX(), enemy.getY() + getHeight() + 10);
-		
-		enemy.setHealth (enemy.getHealth() - damage);
-		
-		if (getX() < enemy.getX())
+		if (enemy.getState() != EntityState.HURT)
 		{
-			enemy.addEntityAction (ActionType.KNOCKBACK_RIGHT);
-		}
-		else
-		{
-			enemy.addEntityAction (ActionType.KNOCKBACK_LEFT);
+			GameScreen.ft.show (String.valueOf (damage), Color.WHITE, enemy.getX(), enemy.getY() + getHeight() + 10);
+			
+			enemy.setHealth (enemy.getHealth() - damage);
+			
+			if (getX() < enemy.getX())
+			{
+				enemy.addEntityAction (ActionType.KNOCKBACK_RIGHT);
+			}
+			else
+			{
+				enemy.addEntityAction (ActionType.KNOCKBACK_LEFT);
+			}
 		}
 	}
 	
@@ -231,6 +246,23 @@ public class Hero extends Entity
 	@Override
 	protected void entityCollisionCheck ()
 	{
+		if (getAttackBounds() != null)
+		{
+			for (Actor a : getStage().getActors())
+			{
+				if (a.getClass().getSuperclass() == Enemy.class)
+				{
+					Enemy e = (Enemy) a;
+					
+					if (e.isAlive() && getAttackBounds().overlaps (e.getBounds()))
+					{
+						hitTarget (e, getDamage ());
+					}
+				}
+			}
+		}
+		
+		/*
 		if (invincibleTime == 0)
 		{
 			for (Actor a : getStage().getActors())
@@ -247,6 +279,6 @@ public class Hero extends Entity
 					}
 				}
 			}
-		}
+		}*/
 	}
 }

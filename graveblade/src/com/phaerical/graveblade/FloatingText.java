@@ -37,7 +37,7 @@ public class FloatingText extends Actor
 	
 	public FloatingText ()
 	{
-		generator = new FreeTypeFontGenerator (Gdx.files.internal("assets/fonts/upheaval.ttf"));
+		generator = new FreeTypeFontGenerator (Gdx.files.internal ("fonts/upheaval.ttf"));
 		font = generator.generateFont (40);
 		textArray = new Array<Text> ();
 	}

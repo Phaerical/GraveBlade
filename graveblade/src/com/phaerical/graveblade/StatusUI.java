@@ -23,7 +23,7 @@ public class StatusUI extends Actor
 		this.hero = hero;
 		
 		shape = new ShapeRenderer ();
-		generator = new FreeTypeFontGenerator (Gdx.files.internal("assets/fonts/upheaval.ttf"));
+		generator = new FreeTypeFontGenerator (Gdx.files.internal ("fonts/upheaval.ttf"));
 		font = generator.generateFont (16);
 		fontBig = generator.generateFont (30);
 	}

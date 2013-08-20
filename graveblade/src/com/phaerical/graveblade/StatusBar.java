@@ -30,7 +30,7 @@ public class StatusBar extends Table
 	{
 		this.hero = hero;
 		
-		generator = new FreeTypeFontGenerator (Gdx.files.internal("assets/fonts/pixel_font.ttf"));
+		generator = new FreeTypeFontGenerator (Gdx.files.internal ("fonts/pixel_font.ttf"));
 		font = generator.generateFont (16);
 		
 		TextureAtlas atlas = new TextureAtlas (Gdx.files.internal ("skins/ui-skin.atlas"));
@@ -95,7 +95,7 @@ public class StatusBar extends Table
         font.drawWrapped (batch, hero.getHealth() + "/" + hero.getMaxHealth(), healthBar.getX(), 33, healthBar.getWidth() - 20, HAlignment.RIGHT);
         
         font.draw (batch, "MP", manaBar.getX()+20, 33);
-        font.drawWrapped (batch, "85/100", manaBar.getX(), 33, manaBar.getWidth() - 20, HAlignment.RIGHT);
+        font.drawWrapped (batch, "100/100", manaBar.getX(), 33, manaBar.getWidth() - 20, HAlignment.RIGHT);
         
         font.draw (batch, "XP", expBar.getX()+20, 33);
         font.drawWrapped (batch, Math.round (((double) hero.getExp () / hero.getMaxExp () * 100) * 100) / 100.00 + "%",

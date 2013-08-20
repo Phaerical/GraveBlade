@@ -28,7 +28,7 @@ public class StatsWindow extends Table
 		
 		Texture.setEnforcePotImages(false);
 		
-		NinePatch np = new NinePatch (new Texture ("assets/backgrounds/window4.png"), 16, 16, 16, 16);
+		NinePatch np = new NinePatch (new Texture (Gdx.files.internal ("backgrounds/window3.png")), 16, 16, 16, 16);
 		NinePatchDrawable npd = new NinePatchDrawable (np);
 		
 		//setSize (265, 390);

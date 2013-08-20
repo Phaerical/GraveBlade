@@ -15,12 +15,12 @@ public class SoundManager
 	
 	public static void load ()
 	{
-		CLICK = Gdx.audio.newSound(Gdx.files.internal ("assets/sounds/click.wav"));
-		JUMP = Gdx.audio.newSound(Gdx.files.internal ("assets/sounds/jump.wav"));
-		LEVEL_UP = Gdx.audio.newSound(Gdx.files.internal ("assets/sounds/level_up.wav"));
-		DEATH = Gdx.audio.newSound(Gdx.files.internal ("assets/sounds/death.wav"));
-		SWING = Gdx.audio.newSound(Gdx.files.internal ("assets/sounds/swing.wav"));
-		HIT = Gdx.audio.newSound(Gdx.files.internal ("assets/sounds/hit.wav"));
+		CLICK = Gdx.audio.newSound(Gdx.files.internal ("sounds/click.wav"));
+		JUMP = Gdx.audio.newSound(Gdx.files.internal ("sounds/jump.wav"));
+		LEVEL_UP = Gdx.audio.newSound(Gdx.files.internal ("sounds/level_up.wav"));
+		DEATH = Gdx.audio.newSound(Gdx.files.internal ("sounds/death.wav"));
+		SWING = Gdx.audio.newSound(Gdx.files.internal ("sounds/swing.wav"));
+		HIT = Gdx.audio.newSound(Gdx.files.internal ("sounds/hit.wav"));
 	}
 	
 	

@@ -1,5 +1,6 @@
 package com.phaerical.graveblade.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -26,7 +27,7 @@ public class Mushroom extends Enemy
 		this.setBounds (getX (), getY (), getWidth (), getHeight ());
 
 		// ANIMATIONS
-		TextureAtlas atlas = new TextureAtlas ("assets/sprites/mushroom.pack");
+		TextureAtlas atlas = new TextureAtlas (Gdx.files.internal ("sprites/mushroom.pack"));
 		this.setIdleAnimation (new Animation (0.2f, atlas.createSprites ("idle")));
 		this.setRunAnimation (new Animation (0.2f, atlas.createSprites ("run")));
 		this.setJumpAnimation (new Animation (0.2f, atlas.createSprites ("run")));

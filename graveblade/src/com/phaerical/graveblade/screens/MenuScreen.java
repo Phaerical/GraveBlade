@@ -38,7 +38,7 @@ public class MenuScreen extends BasicScreen
 		Skin skin = new Skin (Gdx.files.internal ("skins/uiskin.json"));
 		skin.addRegions (atlas);
 		
-		Image bg = new Image (new Texture ("assets/backgrounds/menu.jpg"));
+		Image bg = new Image (new Texture (Gdx.files.internal ("backgrounds/menu.jpg")));
 		bg.getColor().a = 0f;
 		bg.addAction (Actions.fadeIn (1f));
 		stage.addActor (bg);

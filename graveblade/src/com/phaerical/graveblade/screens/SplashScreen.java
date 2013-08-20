@@ -25,7 +25,7 @@ public class SplashScreen extends BasicScreen
 	{
 		Texture.setEnforcePotImages (false);
 		
-		splash = new Texture (Gdx.files.internal ("assets/backgrounds/splash.jpg"));
+		splash = new Texture (Gdx.files.internal ("backgrounds/splash.jpg"));
 		
 		Image image = new Image (splash);
 		image.setFillParent (true);
