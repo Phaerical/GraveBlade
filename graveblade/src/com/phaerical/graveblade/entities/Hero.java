@@ -239,6 +239,11 @@ public class Hero extends Entity
 			{
 				enemy.addEntityAction (ActionType.KNOCKBACK_LEFT);
 			}
+			
+			if (!enemy.isAlive ())
+			{
+				increaseExp (enemy.getExp ());
+			}
 		}
 	}
 	

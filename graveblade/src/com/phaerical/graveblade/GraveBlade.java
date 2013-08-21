@@ -15,8 +15,8 @@ public class GraveBlade extends Game
 		SoundManager.load ();
 		screenManager = new ScreenManager (this);
 		
-		setScreen (new SplashScreen (this));
-		//setScreen (new GameScreen (this));
+		//setScreen (new SplashScreen (this));
+		setScreen (new GameScreen (this));
 		//setScreen (new TestScreen (this));
 	}
 	

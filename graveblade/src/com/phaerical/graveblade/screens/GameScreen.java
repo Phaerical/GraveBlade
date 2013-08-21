@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.phaerical.graveblade.Controller;
 import com.phaerical.graveblade.FloatingText;
 import com.phaerical.graveblade.GraveBlade;
@@ -92,7 +94,7 @@ public class GameScreen extends BasicScreen
 		{
 			mushroom = new Mushroom (map);
 			mushroom.setPosition (400 + 100 * i, 400);
-			stage.addActor (mushroom);
+			//stage.addActor (mushroom);
 		}
 		
 		controller = new Controller (hero, this);
@@ -107,7 +109,13 @@ public class GameScreen extends BasicScreen
 		pauseWindow = new PauseWindow (game);
 		ui.addActor (pauseWindow);
 		
-		statsWindow = new StatsWindow ();
+		
+		TextureAtlas atlas = new TextureAtlas (Gdx.files.internal ("skins/ui-skin.atlas"));
+		
+		Skin skin = new Skin (Gdx.files.internal ("skins/ui-skin.json"));
+		skin.addRegions (atlas);
+		
+		statsWindow = new StatsWindow (skin, hero);
 		ui.addActor (statsWindow);
 		
 		ft = new FloatingText ();

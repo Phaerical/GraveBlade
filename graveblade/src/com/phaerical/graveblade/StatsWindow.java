@@ -3,76 +3,112 @@ package com.phaerical.graveblade;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.phaerical.graveblade.entities.Hero;
 
-public class StatsWindow extends Table
+public class StatsWindow extends Window
 {
 	private boolean open;
 	
-	public StatsWindow ()
+	private TextButton statLevel;
+	private TextButton statHealth;
+	private TextButton statStrength;
+	private TextButton statVitality;
+	private TextButton statDexterity;
+	private TextButton statLuck;
+	private TextButton statAttackSpeed;
+	private TextButton statAttackDamage;
+	private TextButton statCritChance;
+	private TextButton statCritDamage;
+	
+	private Hero hero;
+	
+	public StatsWindow (Skin skin, Hero hero)
 	{
-		super ();
+		super ("STATS", skin);
+		
+		this.hero = hero;
 		
 		open = false;
 		
-		TextureAtlas atlas = new TextureAtlas (Gdx.files.internal ("skins/uiskin.atlas"));
-		
-		Skin skin = new Skin (Gdx.files.internal ("skins/uiskin.json"));
-		skin.addRegions (atlas);
-		
-		Texture.setEnforcePotImages(false);
-		
-		NinePatch np = new NinePatch (new Texture (Gdx.files.internal ("backgrounds/window3.png")), 16, 16, 16, 16);
+		NinePatch np = new NinePatch (new Texture (Gdx.files.internal ("backgrounds/window.png")), 10, 10, 10, 10);
 		NinePatchDrawable npd = new NinePatchDrawable (np);
 		
-		//setSize (265, 390);
-		setSize (800, 390);
+		setMovable(false);
+		setKeepWithinStage(false);
+		setSize (820, 390);
 		setPosition (-getWidth(), 80);
 		setBackground (npd);
+		padTop(70);
+		padLeft (35);
+		padRight (35);
+		left ();
 		
-		Label lblLevel = new Label ("LEVEL", skin, "small");
-		Label lblHeroLevel = new Label ("5", skin, "small");
-		Label lblHealth = new Label ("HEALTH", skin, "small");
-		Label lblHeroHealth = new Label ("100/100", skin, "small");
-		Label lblStrength = new Label ("STRENGTH", skin, "small");
-		Label lblHeroStrength = new Label ("36", skin, "small");
-		Label lblVitality = new Label ("VITALITY", skin, "small");
-		Label lblHeroVitality = new Label ("25", skin, "small");
-		Label lblDefence = new Label ("DEFENCE", skin, "small");
-		Label lblHeroDefence = new Label ("11", skin, "small");
-		Label lblAttackSpeed = new Label ("ATTACK SPEED", skin, "small");
-		Label lblHeroAttackSpeed = new Label ("100%", skin, "small");
-		Label lblAttackDamage = new Label ("ATTACK DAMAGE", skin, "small");
-		Label lblHeroAttackDamage = new Label ("36-42", skin, "small");
+		TextButton btnStrength = new TextButton ("+STRENGTH", skin);
+		TextButton btnVitality = new TextButton ("+VITALITY", skin);
+		TextButton btnDexterity = new TextButton ("+DEXTERITY", skin);
+		TextButton btnLuck = new TextButton ("+LUCK", skin);
 		
-		add (new Label ("STATS", skin)).align (Align.center).colspan(2).spaceBottom(15).row();
-		add (lblLevel).align (Align.left).expandX ();
-		add (lblHeroLevel).align (Align.right).row ();
-		add (lblHealth).align (Align.left);
-		add (lblHeroHealth).align (Align.right);
-		row ().spaceTop(30);
-		add (lblStrength).align (Align.left);
-		add (lblHeroStrength).align (Align.right).row ();
-		add (lblVitality).align (Align.left);
-		add (lblHeroVitality).align (Align.right).row ();
-		add (lblDefence).align (Align.left);
-		add (lblHeroDefence).align (Align.right);
-		row ().spaceTop(30);
-		add (lblAttackSpeed).align (Align.left);
-		add (lblHeroAttackSpeed).align (Align.right).row ();
-		add (lblAttackDamage).align (Align.left);
-		add (lblHeroAttackDamage).align (Align.right).row ();
+		statLevel = new TextButton ("", skin, "box");
+		statHealth = new TextButton ("", skin, "box");
+		statStrength = new TextButton ("", skin, "box");
+		statVitality = new TextButton ("", skin, "box");
+		statDexterity = new TextButton ("", skin, "box");
+		statLuck = new TextButton ("", skin, "box");
+		statAttackSpeed = new TextButton ("", skin, "box");
+		statAttackDamage = new TextButton ("", skin, "box");
+		statCritChance = new TextButton ("", skin, "box");
+		statCritDamage = new TextButton ("", skin, "box");
 		
-		padTop (60);
-		padBottom (85);
-		padLeft (75);
-		padRight (75);
+		
+		Table tblButtons = new Table ();
+		tblButtons.add (new Label ("STAT POINTS: 2", skin, "small")).align (Align.center).spaceBottom(15).row();
+		tblButtons.add (btnStrength).size (150, 50).space(4).row ();
+		tblButtons.add (btnVitality).size (150, 50).space(4).row ();
+		tblButtons.add (btnDexterity).size (150, 50).space(4).row ();
+		tblButtons.add (btnLuck).size (150, 50).space(4).row ();
+		
+		
+		Table tbl = new Table ();
+		tbl.columnDefaults(0).align (Align.left).width (180);
+		tbl.columnDefaults(1).align (Align.right).width (90).padLeft(-4).spaceRight (10);
+		tbl.columnDefaults(2).align (Align.left).width (180);
+		tbl.columnDefaults(3).align (Align.right).width (90).padLeft(-4);
+		
+		tbl.add (new TextButton ("LEVEL", skin, "box"));
+		tbl.add (statLevel);
+		tbl.add (new TextButton ("HEALTH", skin, "box"));
+		tbl.add (statHealth);
+		tbl.row ().spaceTop(30);
+		
+		tbl.add (new TextButton ("STRENGTH", skin, "box"));
+		tbl.add (statStrength);
+		tbl.add (new TextButton ("VITALITY", skin, "box"));
+		tbl.add (statVitality).row ().spaceTop (4);
+		tbl.add (new TextButton ("DEXTERITY", skin, "box"));
+		tbl.add (statDexterity);
+		tbl.add (new TextButton ("LUCK", skin, "box"));
+		tbl.add (statLuck);
+		tbl.row ().spaceTop(30);
+		
+		tbl.add (new TextButton ("ATTACK SPEED", skin, "box"));
+		tbl.add (statAttackSpeed);
+		tbl.add (new TextButton ("ATTACK DAMAGE", skin, "box"));
+		tbl.add (statAttackDamage).row ().spaceTop (4);
+		tbl.add (new TextButton ("CRITICAL CHANCE", skin, "box"));
+		tbl.add (statCritChance);
+		tbl.add (new TextButton ("CRITICAL DAMAGE", skin, "box"));
+		tbl.add (statCritDamage);
+		
+		add (tblButtons).spaceRight (70).left().bottom();
+		add (tbl).width (500);
 	}
 	
 	public void show ()
@@ -92,20 +128,21 @@ public class StatsWindow extends Table
 		return open;
 	}
 	
-	/*
+	
 	@Override
-	public void draw (SpriteBatch batch, float parentAlpha)
+	public void act (float delta)
 	{
-		batch.end ();
-		Gdx.gl.glEnable (GL20.GL_BLEND);
-	    Gdx.gl.glBlendFunc (GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-	    shape.begin(ShapeType.Filled);
-	    shape.setColor(0, 0, 0, 0.8f);
-	    shape.rect (0, 0, 1024, 576);
-	    shape.end();
-	    Gdx.gl.glDisable (GL20.GL_BLEND);
-	    batch.begin ();
-	    
-	    super.draw (batch, parentAlpha);
-	}*/
+		super.act (delta);
+		
+		statLevel.setText (String.valueOf (hero.getLevel ()));
+		statHealth.setText (String.valueOf (hero.getMaxHealth ()));
+		statStrength.setText (String.valueOf (hero.getStrength ()));
+		statVitality.setText (String.valueOf (hero.getVitality ()));
+		statDexterity.setText (String.valueOf (hero.getDexterity ()));
+		statLuck.setText (String.valueOf (hero.getLuck ()));
+		statAttackSpeed.setText ("100%");
+		statAttackDamage.setText (String.valueOf (hero.getDamage ()));
+		statCritChance.setText ("5%");
+		statCritDamage.setText ("100%");
+	}
 }

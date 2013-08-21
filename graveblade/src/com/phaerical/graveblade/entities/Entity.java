@@ -36,8 +36,9 @@ public abstract class Entity extends Actor
 	private int health;
 	
 	private int strength;
-	private int defence;
 	private int vitality;
+	private int dexterity;
+	private int luck;
 	
 	private Animation idleAnimation;
 	private Animation runAnimation;
@@ -83,16 +84,6 @@ public abstract class Entity extends Actor
 		strength = str;
 	}
 	
-	public int getDefence ()
-	{
-		return defence;
-	}
-	
-	public void setDefence (int def)
-	{
-		defence = def;
-	}
-	
 	public int getVitality ()
 	{
 		return vitality;
@@ -101,6 +92,26 @@ public abstract class Entity extends Actor
 	public void setVitality (int vit)
 	{
 		vitality = vit;
+	}
+	
+	public int getDexterity ()
+	{
+		return dexterity;
+	}
+	
+	public void setDexterity (int dex)
+	{
+		dexterity = dex;
+	}
+	
+	public int getLuck ()
+	{
+		return luck;
+	}
+	
+	public void setLuck (int lck)
+	{
+		luck = lck;
 	}
 	
 	public float getSpeed ()

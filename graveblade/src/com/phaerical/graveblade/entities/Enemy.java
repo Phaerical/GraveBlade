@@ -21,6 +21,7 @@ public class Enemy extends Entity
 		this.ai = new ArtificialIntelligence (this);
 	}
 	
+	
 	@Override
 	public void act (float delta)
 	{
@@ -32,11 +33,16 @@ public class Enemy extends Entity
 		}
 	}
 	
+	
+	public int getExp ()
+	{
+		return exp;
+	}
+	
 	public void setExp (int amount)
 	{
 		exp = amount;
 	}
-	
 	
 	public void hitTarget (Hero hero, int damage)
 	{
