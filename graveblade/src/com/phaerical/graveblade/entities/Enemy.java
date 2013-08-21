@@ -2,9 +2,7 @@ package com.phaerical.graveblade.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.phaerical.graveblade.entities.Entity.EntityState;
 import com.phaerical.graveblade.entities.EntityAction.ActionType;
 import com.phaerical.graveblade.screens.GameScreen;
 

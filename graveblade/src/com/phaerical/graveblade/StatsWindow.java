@@ -3,6 +3,7 @@ package com.phaerical.graveblade;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.phaerical.graveblade.entities.Hero;
 
@@ -17,6 +19,7 @@ public class StatsWindow extends Window
 {
 	private boolean open;
 	
+	private Label statPoints;
 	private TextButton statLevel;
 	private TextButton statHealth;
 	private TextButton statStrength;
@@ -28,21 +31,29 @@ public class StatsWindow extends Window
 	private TextButton statCritChance;
 	private TextButton statCritDamage;
 	
+	private TextButton btnStrength;
+	private TextButton btnVitality;
+	private TextButton btnDexterity;
+	private TextButton btnLuck;
+	
 	private Hero hero;
 	
-	public StatsWindow (Skin skin, Hero hero)
+	public StatsWindow (Skin skin, Hero h)
 	{
 		super ("STATS", skin);
 		
-		this.hero = hero;
+		this.hero = h;
 		
 		open = false;
 		
 		NinePatch np = new NinePatch (new Texture (Gdx.files.internal ("backgrounds/window.png")), 10, 10, 10, 10);
 		NinePatchDrawable npd = new NinePatchDrawable (np);
 		
-		setMovable(false);
-		setKeepWithinStage(false);
+		//*************************************
+		// WINDOW PROPERTIES
+		//*************************************
+		setMovable (false);
+		setKeepWithinStage (false);
 		setSize (820, 390);
 		setPosition (-getWidth(), 80);
 		setBackground (npd);
@@ -51,11 +62,11 @@ public class StatsWindow extends Window
 		padRight (35);
 		left ();
 		
-		TextButton btnStrength = new TextButton ("+STRENGTH", skin);
-		TextButton btnVitality = new TextButton ("+VITALITY", skin);
-		TextButton btnDexterity = new TextButton ("+DEXTERITY", skin);
-		TextButton btnLuck = new TextButton ("+LUCK", skin);
 		
+		//*************************************
+		// STAT LABELS
+		//*************************************
+		statPoints = new Label ("", skin, "small");
 		statLevel = new TextButton ("", skin, "box");
 		statHealth = new TextButton ("", skin, "box");
 		statStrength = new TextButton ("", skin, "box");
@@ -68,14 +79,61 @@ public class StatsWindow extends Window
 		statCritDamage = new TextButton ("", skin, "box");
 		
 		
+		//*************************************
+		// STAT BUTTONS
+		//*************************************
+		btnStrength = new TextButton ("+STRENGTH", skin);
+		btnVitality = new TextButton ("+VITALITY", skin);
+		btnDexterity = new TextButton ("+DEXTERITY", skin);
+		btnLuck = new TextButton ("+LUCK", skin);
+		
+		btnStrength.addListener (new ChangeListener () {
+			@Override
+			public void changed (ChangeEvent event, Actor actor)
+			{
+				hero.setStrength (hero.getStrength() + 1);
+				hero.decreaseStatPoints (1);
+			}});
+		
+		btnVitality.addListener (new ChangeListener () {
+			@Override
+			public void changed (ChangeEvent event, Actor actor)
+			{
+				hero.setVitality (hero.getVitality() + 1);
+				hero.decreaseStatPoints (1);
+			}});
+		
+		btnDexterity.addListener (new ChangeListener () {
+			@Override
+			public void changed (ChangeEvent event, Actor actor)
+			{
+				hero.setDexterity (hero.getDexterity() + 1);
+				hero.decreaseStatPoints (1);
+			}});
+		
+		btnLuck.addListener (new ChangeListener () {
+			@Override
+			public void changed (ChangeEvent event, Actor actor)
+			{
+				hero.setLuck (hero.getLuck() + 1);
+				hero.decreaseStatPoints (1);
+			}});
+		
+		
+		//*************************************
+		// BUTTON PANEL
+		//*************************************
 		Table tblButtons = new Table ();
-		tblButtons.add (new Label ("STAT POINTS: 2", skin, "small")).align (Align.center).spaceBottom(15).row();
+		tblButtons.add (statPoints).align (Align.center).spaceBottom(15).row();
 		tblButtons.add (btnStrength).size (150, 50).space(4).row ();
 		tblButtons.add (btnVitality).size (150, 50).space(4).row ();
 		tblButtons.add (btnDexterity).size (150, 50).space(4).row ();
 		tblButtons.add (btnLuck).size (150, 50).space(4).row ();
 		
 		
+		//*************************************
+		// LABEL PANEL
+		//*************************************
 		Table tbl = new Table ();
 		tbl.columnDefaults(0).align (Align.left).width (180);
 		tbl.columnDefaults(1).align (Align.right).width (90).padLeft(-4).spaceRight (10);
@@ -134,6 +192,8 @@ public class StatsWindow extends Window
 	{
 		super.act (delta);
 		
+		statPoints.setText("STAT POINTS: " + hero.getStatPoints ());
+		
 		statLevel.setText (String.valueOf (hero.getLevel ()));
 		statHealth.setText (String.valueOf (hero.getMaxHealth ()));
 		statStrength.setText (String.valueOf (hero.getStrength ()));
@@ -141,8 +201,23 @@ public class StatsWindow extends Window
 		statDexterity.setText (String.valueOf (hero.getDexterity ()));
 		statLuck.setText (String.valueOf (hero.getLuck ()));
 		statAttackSpeed.setText ("100%");
-		statAttackDamage.setText (String.valueOf (hero.getDamage ()));
-		statCritChance.setText ("5%");
-		statCritDamage.setText ("100%");
+		statAttackDamage.setText (hero.getMinDamage () + "-" + hero.getMaxDamage ());
+		statCritChance.setText (hero.getCritChance () + "%");
+		statCritDamage.setText (hero.getCritDamage () + "%");
+		
+		if (hero.getStatPoints () == 0)
+		{
+			btnStrength.setDisabled (true);
+			btnVitality.setDisabled (true);
+			btnDexterity.setDisabled (true);
+			btnLuck.setDisabled (true);
+		}
+		else
+		{
+			btnStrength.setDisabled (false);
+			btnVitality.setDisabled (false);
+			btnDexterity.setDisabled (false);
+			btnLuck.setDisabled (false);
+		}
 	}
 }

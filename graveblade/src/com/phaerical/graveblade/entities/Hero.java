@@ -3,16 +3,13 @@ package com.phaerical.graveblade.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.phaerical.graveblade.ExperienceTable;
 import com.phaerical.graveblade.GraveBlade;
-import com.phaerical.graveblade.ScreenManager;
 import com.phaerical.graveblade.SoundManager;
-import com.phaerical.graveblade.entities.Entity.EntityState;
 import com.phaerical.graveblade.entities.EntityAction.ActionType;
 import com.phaerical.graveblade.screens.GameScreen;
 
@@ -20,11 +17,13 @@ public class Hero extends Entity
 {
 	private float INVINCIBLE_DURATION = 1.5f;
 	
+	private final int STAT_POINTS_PER_LEVEL = 2 ;
+	
 	private int level;
 	private int maxExp;
 	private int exp;
+	private int statPoints;
 	
-	private int damage;
 	private int critChance;
 	private double critDamageMultiplier;
 	
@@ -48,13 +47,21 @@ public class Hero extends Entity
 		this.setHealth (100);
 		this.setName ("hero");
 		
-		this.damage = 5;
-		this.critChance = 10;
-		this.critDamageMultiplier = 2;
+		// BASE STATS
+		this.setStrength (10);
+		this.setVitality (10);
+		this.setDexterity (10);
+		this.setLuck (10);
 		
+		// CRIT
+		this.critChance = 10;
+		this.critDamageMultiplier = 2.05;
+		
+		// LEVEL
 		this.level =  1;
 		this.exp = 0;
 		this.maxExp = ExperienceTable.getExpRequired (level);
+		this.statPoints = 0;
 		
 		// BOUNDS
 		this.setWidth (80);
@@ -76,7 +83,7 @@ public class Hero extends Entity
 	
 	public int getDamage ()
 	{
-		int dmg = (int) (damage + Math.random () * 4);
+		int dmg = (int) (getStrength () + Math.random () * 4);
 		
 		/*if (Math.random() * 100 < critChance)
 		{
@@ -86,6 +93,25 @@ public class Hero extends Entity
 		return dmg;
 	}
 	
+	public int getMinDamage ()
+	{
+		return getStrength ();
+	}
+	
+	public int getMaxDamage ()
+	{
+		return getStrength () + 4;
+	}
+	
+	public int getCritChance ()
+	{
+		return critChance;
+	}
+	
+	public int getCritDamage ()
+	{
+		return (int) Math.round (critDamageMultiplier * 100);
+	}
 	
 	public void increaseExp (int amount)
 	{
@@ -98,21 +124,34 @@ public class Hero extends Entity
 		}
 	}
 	
-	
 	public void levelUp ()
 	{
 		SoundManager.play (SoundManager.LEVEL_UP);
 		GameScreen.ft.show ("LEVEL UP!", Color.GREEN, getX() - 60, getY() + getHeight() + 40);
 		maxExp = ExperienceTable.getExpRequired (++level);
 		setHealth (getMaxHealth ());
+		increaseStatPoints (STAT_POINTS_PER_LEVEL);
 	}
 	
+	public void increaseStatPoints (int amount)
+	{
+		statPoints += amount;
+	}
+	
+	public void decreaseStatPoints (int amount)
+	{
+		statPoints = Math.max (0, statPoints - amount);
+	}
+	
+	public int getStatPoints ()
+	{
+		return statPoints;
+	}
 	
 	public int getLevel ()
 	{
 		return level;
 	}
-	
 	
 	public int getExp ()
 	{
