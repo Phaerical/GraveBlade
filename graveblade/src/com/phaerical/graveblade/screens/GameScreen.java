@@ -92,7 +92,7 @@ public class GameScreen extends BasicScreen
 		{
 			mushroom = new Mushroom (map);
 			mushroom.setPosition (400 + 100 * i, 400);
-			//stage.addActor (mushroom);
+			stage.addActor (mushroom);
 		}
 		
 		controller = new Controller (hero, this);
@@ -106,7 +106,6 @@ public class GameScreen extends BasicScreen
 		
 		pauseWindow = new PauseWindow (game);
 		ui.addActor (pauseWindow);
-		
 		
 		TextureAtlas atlas = new TextureAtlas (Gdx.files.internal ("skins/ui-skin.atlas"));
 		

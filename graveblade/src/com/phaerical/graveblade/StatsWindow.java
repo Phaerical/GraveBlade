@@ -200,7 +200,7 @@ public class StatsWindow extends Window
 		statVitality.setText (String.valueOf (hero.getVitality ()));
 		statDexterity.setText (String.valueOf (hero.getDexterity ()));
 		statLuck.setText (String.valueOf (hero.getLuck ()));
-		statAttackSpeed.setText ("100%");
+		statAttackSpeed.setText (hero.getAttackSpeed () + "%");
 		statAttackDamage.setText (hero.getMinDamage () + "-" + hero.getMaxDamage ());
 		statCritChance.setText (hero.getCritChance () + "%");
 		statCritDamage.setText (hero.getCritDamage () + "%");

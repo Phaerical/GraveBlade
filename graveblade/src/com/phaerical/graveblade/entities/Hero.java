@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.phaerical.graveblade.ExperienceTable;
+import com.phaerical.graveblade.Formula;
 import com.phaerical.graveblade.GraveBlade;
 import com.phaerical.graveblade.SoundManager;
 import com.phaerical.graveblade.entities.EntityAction.ActionType;
@@ -17,15 +18,16 @@ public class Hero extends Entity
 {
 	private float INVINCIBLE_DURATION = 1.5f;
 	
-	private final int STAT_POINTS_PER_LEVEL = 2 ;
+	private final int STAT_POINTS_PER_LEVEL = 2;
 	
 	private int level;
 	private int maxExp;
 	private int exp;
 	private int statPoints;
 	
-	private int critChance;
 	private double critDamageMultiplier;
+	
+	private TextureAtlas atlas;
 	
 	private GraveBlade game;
 	
@@ -54,8 +56,7 @@ public class Hero extends Entity
 		this.setLuck (10);
 		
 		// CRIT
-		this.critChance = 10;
-		this.critDamageMultiplier = 2.05;
+		this.critDamageMultiplier = 2;
 		
 		// LEVEL
 		this.level =  1;
@@ -72,40 +73,40 @@ public class Hero extends Entity
 		this.setSpriteScale (2);
 		
 		// ANIMATIONS
-		TextureAtlas atlas = new TextureAtlas (Gdx.files.internal ("sprites/zero.pack"));
+		this.atlas = new TextureAtlas (Gdx.files.internal ("sprites/zero.pack"));
 		this.setIdleAnimation (new Animation (0.3f, atlas.createSprites ("idle")));
 		this.setRunAnimation (new Animation (0.1f, atlas.createSprites ("run")));
 		this.setJumpAnimation (new Animation (0.15f, atlas.createSprites ("jump")));
-		this.setAttackAnimation (new Animation (0.1f, atlas.createSprites ("attack")));
+		this.setAttackAnimation (new Animation (0.1f * getAttackSpeed () / 100, atlas.createSprites ("attack")));
 		this.setHurtAnimation (new Animation (0.3f, atlas.createSprites ("hurt")));
 		this.setDeathAnimation (new Animation (0.7f, atlas.createSprites ("hurt")));
 	}
 	
 	public int getDamage ()
 	{
-		int dmg = (int) (getStrength () + Math.random () * 4);
-		
-		/*if (Math.random() * 100 < critChance)
-		{
-			dmg *= critDamageMultiplier;
-		}*/
+		int dmg = getMinDamage () + (int) (Math.random () * (getMaxDamage () - getMinDamage() + 1));
 		
 		return dmg;
 	}
 	
 	public int getMinDamage ()
 	{
-		return getStrength ();
+		return Formula.calculateMinDamage (getStrength ());
 	}
 	
 	public int getMaxDamage ()
 	{
-		return getStrength () + 4;
+		return Formula.calculateMaxDamage (getStrength ());
+	}
+	
+	public int getAttackSpeed ()
+	{
+		return (int) (Formula.calculateAttackSpeed (getDexterity ()) * 100);
 	}
 	
 	public int getCritChance ()
 	{
-		return critChance;
+		return Formula.calculateCritChance (getLuck ());
 	}
 	
 	public int getCritDamage ()
@@ -161,6 +162,14 @@ public class Hero extends Entity
 	public int getMaxExp ()
 	{
 		return maxExp;
+	}
+	
+	@Override
+	public void attack ()
+	{
+		// Recalculate attack speed
+		setAttackAnimation (new Animation (0.1f * 100 / getAttackSpeed (), atlas.createSprites ("attack")));
+		super.attack ();
 	}
 	
 	public Rectangle getAttackBounds ()
@@ -305,24 +314,5 @@ public class Hero extends Entity
 				}
 			}
 		}
-		
-		/*
-		if (invincibleTime == 0)
-		{
-			for (Actor a : getStage().getActors())
-			{
-				if (a.getClass().getSuperclass() == Enemy.class)
-				{
-					Enemy e = (Enemy) a;
-					
-					if (e.isAlive () && getBounds().overlaps (e.getBounds()))
-					{
-						hurt (5);
-						
-						break;
-					}
-				}
-			}
-		}*/
 	}
 }
