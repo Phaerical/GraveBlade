@@ -80,7 +80,7 @@ public class StatusBar extends Table
 	public void act (float delta)
 	{
 		levelBar.setText ("LEVEL " + hero.getLevel ());
-		healthBar.setValue (hero.getHealth ());
+		healthBar.setValue ((float) hero.getHealth () / hero.getMaxHealth () * 100);
 		expBar.setValue ((float) hero.getExp() / hero.getMaxExp() * 100);
 	}
 	

@@ -44,16 +44,15 @@ public class Hero extends Entity
 		
 		this.invincibleTime = 0;
 		
-		// HP
-		this.setMaxHealth (100);
-		this.setHealth (100);
-		this.setName ("hero");
-		
 		// BASE STATS
 		this.setStrength (10);
 		this.setVitality (10);
 		this.setDexterity (10);
 		this.setLuck (10);
+		
+		// HP
+		this.setHealth (100);
+		this.setName ("hero");
 		
 		// CRIT
 		this.critDamageMultiplier = 2;
@@ -112,6 +111,12 @@ public class Hero extends Entity
 	public int getCritDamage ()
 	{
 		return (int) Math.round (critDamageMultiplier * 100);
+	}
+	
+	@Override
+	public int getMaxHealth ()
+	{
+		return Formula.calculateHealth (getVitality ());
 	}
 	
 	public void increaseExp (int amount)

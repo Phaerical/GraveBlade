@@ -286,9 +286,9 @@ public abstract class Entity extends Actor
 	
 	public void setHealth (int amount)
 	{
-		if (amount > maxHealth)
+		if (amount > getMaxHealth ())
 		{
-			health = maxHealth;
+			health = getMaxHealth ();
 		}
 		else if (amount <= 0)
 		{
