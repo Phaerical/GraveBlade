@@ -235,6 +235,25 @@ public class GameScreen extends BasicScreen
 		ui.draw ();
 		
 		
+		// Keep cursor within the screen
+		if (Gdx.input.getX () < 0)
+		{
+			Gdx.input.setCursorPosition (0, - (Gdx.input.getY () - HEIGHT));
+		}
+		else if (Gdx.input.getX () > WIDTH - cursor.getWidth ())
+		{
+			Gdx.input.setCursorPosition (WIDTH - cursor.getWidth (), - (Gdx.input.getY () - HEIGHT));
+		}
+		
+		if (Gdx.input.getY() < 0)
+		{
+			Gdx.input.setCursorPosition (Gdx.input.getX(), HEIGHT);
+		}
+		else if (Gdx.input.getY() > HEIGHT - cursor.getHeight ())
+		{
+			Gdx.input.setCursorPosition (Gdx.input.getX(), cursor.getHeight ());
+		}
+		
 		// Handle mouse inactivity
 		if (Gdx.input.getDeltaX() != 0 && Gdx.input.getDeltaY() != 0)
 		{

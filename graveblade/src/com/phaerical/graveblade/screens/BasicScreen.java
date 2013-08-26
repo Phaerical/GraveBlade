@@ -18,6 +18,7 @@ public abstract class BasicScreen implements Screen
 	{
 		this.game = game;
 		this.stage = new Stage (WIDTH, HEIGHT, true);
+		Gdx.input.setCursorCatched (true);
 	}
 
 	@Override
