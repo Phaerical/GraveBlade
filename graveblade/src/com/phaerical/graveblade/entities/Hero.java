@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Array.ArrayIterator;
 import com.phaerical.graveblade.ExperienceTable;
@@ -45,11 +46,12 @@ public class Hero extends Entity
 		
 		this.game = game;
 		
-		Item helmet = new Item ("Beginner Helmet", ItemType.HELMET, 1, 4, 4, 4, 4);
-		Item armor = new Item ("Beginner Armor", ItemType.ARMOR, 1, 4, 4, 4, 4);
-		Item glove = new Item ("Beginner Gloves", ItemType.GLOVE, 1, 4, 4, 4, 4);
-		Item boots = new Item ("Beginner Boots", ItemType.BOOTS, 1, 4, 4, 4, 4);
-		Item weapon = new Item ("Beginner Sword", ItemType.WEAPON, 1, 4, 4, 4, 4);
+		TextureAtlas itemAtlas = new TextureAtlas (Gdx.files.internal ("sprites/items.pack"));
+		Item helmet = new Item ("Beginner Helmet", ItemType.HELMET, itemAtlas.createSprite("helm1"), 1, 4, 4, 4, 4);
+		Item armor = new Item ("Beginner Armor", ItemType.ARMOR, itemAtlas.createSprite("armor1"), 1, 4, 4, 4, 4);
+		Item glove = new Item ("Beginner Gloves", ItemType.GLOVE, itemAtlas.createSprite("glove1"), 1, 4, 4, 4, 4);
+		Item boots = new Item ("Beginner Boots", ItemType.BOOTS, itemAtlas.createSprite("boots1"), 1, 4, 4, 4, 4);
+		Item weapon = new Item ("Beginner Sword", ItemType.WEAPON, itemAtlas.createSprite("sword1"), 1, 4, 4, 4, 4);
 		
 		this.equipment = new Array<Item> (true, 5);
 		this.equipment.add (helmet);
@@ -70,7 +72,7 @@ public class Hero extends Entity
 		this.setLuck (10);
 		
 		// HP
-		this.setHealth (100);
+		this.setHealth (getMaxHealth ());
 		this.setName ("hero");
 		
 		// CRIT
@@ -98,6 +100,11 @@ public class Hero extends Entity
 		this.setAttackAnimation (new Animation (0.1f * getAttackSpeed () / 100, atlas.createSprites ("attack")));
 		this.setHurtAnimation (new Animation (0.3f, atlas.createSprites ("hurt")));
 		this.setDeathAnimation (new Animation (0.7f, atlas.createSprites ("hurt")));
+	}
+	
+	public Array<Item> getEquipment ()
+	{
+		return equipment;
 	}
 	
 	public int getBonusStrength ()

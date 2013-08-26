@@ -63,6 +63,11 @@ public class Controller extends InputListener
 			screen.triggerStatsWindow ();
 		}
 		
+		if (keycode == Keys.I)
+		{
+			screen.triggerEquipmentWindow ();
+		}
+		
 		return true;
 	}
 	

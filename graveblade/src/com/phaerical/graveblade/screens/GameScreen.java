@@ -14,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.phaerical.graveblade.Controller;
+import com.phaerical.graveblade.EquipmentWindow;
 import com.phaerical.graveblade.FloatingText;
 import com.phaerical.graveblade.GraveBlade;
 import com.phaerical.graveblade.PauseWindow;
@@ -39,12 +40,17 @@ public class GameScreen extends BasicScreen
 	
 	private PauseWindow pauseWindow;
 	private StatsWindow statsWindow;
+	private EquipmentWindow equipWindow;
 	
 	public static FloatingText ft;
 	
 	private Hero hero;
 	private Poring poring;
 	private Mushroom mushroom;
+	
+	private Texture cursor;
+	
+	private float mouseActiveTime;
 	
 	Texture background;
 	
@@ -115,10 +121,16 @@ public class GameScreen extends BasicScreen
 		statsWindow = new StatsWindow (skin, hero);
 		ui.addActor (statsWindow);
 		
+		equipWindow = new EquipmentWindow (skin, hero);
+		ui.addActor (equipWindow);
+		
 		ft = new FloatingText ();
 		stage.addActor (ft);
 		
 		InputMultiplexer im = new InputMultiplexer (stage, ui);
+		
+		cursor = new Texture (Gdx.files.internal ("sprites/cursor.png"));
+		mouseActiveTime = 100;
 		
 		Gdx.input.setInputProcessor (im);
 	}
@@ -135,6 +147,18 @@ public class GameScreen extends BasicScreen
 		{
 			statsWindow.show ();
 			state = State.VIEW_WINDOW;
+		}
+	}
+	
+	public void triggerEquipmentWindow ()
+	{
+		if (equipWindow.isOpen ())
+		{
+			equipWindow.hide ();
+		}
+		else
+		{
+			equipWindow.show ();
 		}
 	}
 	
@@ -209,6 +233,23 @@ public class GameScreen extends BasicScreen
 		}
 		
 		ui.draw ();
+		
+		
+		// Handle mouse inactivity
+		if (Gdx.input.getDeltaX() != 0 && Gdx.input.getDeltaY() != 0)
+		{
+			mouseActiveTime = 100;
+		}
+		
+		mouseActiveTime--;
+		
+		// Draw cursor if active
+		if (mouseActiveTime > 0)
+		{
+			ui.getSpriteBatch ().begin ();
+			ui.getSpriteBatch ().draw (cursor, Gdx.input.getX (), - (Gdx.input.getY () - HEIGHT) - 32);
+			ui.getSpriteBatch ().end ();
+		}
 	}
 	
 	
