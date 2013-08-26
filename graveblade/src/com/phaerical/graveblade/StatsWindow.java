@@ -192,10 +192,10 @@ public class StatsWindow extends Window
 		
 		statLevel.setText (String.valueOf (hero.getLevel ()));
 		statHealth.setText (String.valueOf (hero.getMaxHealth ()));
-		statStrength.setText (String.valueOf (hero.getStrength ()));
-		statVitality.setText (String.valueOf (hero.getVitality ()));
-		statDexterity.setText (String.valueOf (hero.getDexterity ()));
-		statLuck.setText (String.valueOf (hero.getLuck ()));
+		statStrength.setText (hero.getStrength () + "+" + hero.getBonusStrength ());
+		statVitality.setText (hero.getVitality () + "+" + hero.getBonusVitality ());
+		statDexterity.setText (hero.getDexterity () + "+" + hero.getBonusDexterity ());
+		statLuck.setText (hero.getLuck () + "+" + hero.getBonusLuck ());
 		statAttackSpeed.setText (hero.getAttackSpeed () + "%");
 		statAttackDamage.setText (hero.getMinDamage () + "-" + hero.getMaxDamage ());
 		statCritChance.setText (hero.getCritChance () + "%");

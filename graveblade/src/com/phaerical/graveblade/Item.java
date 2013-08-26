@@ -2,7 +2,7 @@ package com.phaerical.graveblade;
 
 public class Item
 {
-	enum ItemType
+	public enum ItemType
 	{
 		HELMET, ARMOR, GLOVE, BOOTS, WEAPON
 	}

@@ -7,9 +7,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Array.ArrayIterator;
 import com.phaerical.graveblade.ExperienceTable;
 import com.phaerical.graveblade.Formula;
 import com.phaerical.graveblade.GraveBlade;
+import com.phaerical.graveblade.Item;
+import com.phaerical.graveblade.Item.ItemType;
 import com.phaerical.graveblade.SoundManager;
 import com.phaerical.graveblade.entities.EntityAction.ActionType;
 import com.phaerical.graveblade.screens.GameScreen;
@@ -29,6 +33,8 @@ public class Hero extends Entity
 	
 	private TextureAtlas atlas;
 	
+	private Array<Item> equipment;
+	
 	private GraveBlade game;
 	
 	private float invincibleTime;
@@ -38,6 +44,19 @@ public class Hero extends Entity
 		super (map);
 		
 		this.game = game;
+		
+		Item helmet = new Item ("Beginner Helmet", ItemType.HELMET, 1, 4, 4, 4, 4);
+		Item armor = new Item ("Beginner Armor", ItemType.ARMOR, 1, 4, 4, 4, 4);
+		Item glove = new Item ("Beginner Gloves", ItemType.GLOVE, 1, 4, 4, 4, 4);
+		Item boots = new Item ("Beginner Boots", ItemType.BOOTS, 1, 4, 4, 4, 4);
+		Item weapon = new Item ("Beginner Sword", ItemType.WEAPON, 1, 4, 4, 4, 4);
+		
+		this.equipment = new Array<Item> (true, 5);
+		this.equipment.add (helmet);
+		this.equipment.add (armor);
+		this.equipment.add (glove);
+		this.equipment.add (boots);
+		this.equipment.add (weapon);
 		
 		this.setSpeed (8f);
 		this.setJumpSpeed (15f);
@@ -81,6 +100,78 @@ public class Hero extends Entity
 		this.setDeathAnimation (new Animation (0.7f, atlas.createSprites ("hurt")));
 	}
 	
+	public int getBonusStrength ()
+	{
+		ArrayIterator<Item> iter = new ArrayIterator<Item> (equipment);
+		int amount = 0;
+		
+		while (iter.hasNext ())
+		{
+			amount += iter.next().getStrength ();
+		}
+		
+		return amount;
+	}
+	
+	public int getBonusVitality ()
+	{
+		ArrayIterator<Item> iter = new ArrayIterator<Item> (equipment);
+		int amount = 0;
+		
+		while (iter.hasNext ())
+		{
+			amount += iter.next().getVitality ();
+		}
+		
+		return amount;
+	}
+	
+	public int getBonusDexterity ()
+	{
+		ArrayIterator<Item> iter = new ArrayIterator<Item> (equipment);
+		int amount = 0;
+		
+		while (iter.hasNext ())
+		{
+			amount += iter.next().getDexterity ();
+		}
+		
+		return amount;
+	}
+	
+	public int getBonusLuck ()
+	{
+		ArrayIterator<Item> iter = new ArrayIterator<Item> (equipment);
+		int amount = 0;
+		
+		while (iter.hasNext ())
+		{
+			amount += iter.next().getLuck ();
+		}
+		
+		return amount;
+	}
+	
+	public int getTotalStrength ()
+	{
+		return getStrength () + getBonusStrength ();
+	}
+	
+	public int getTotalVitality ()
+	{
+		return getVitality () + getBonusVitality ();
+	}
+	
+	public int getTotalDexterity ()
+	{
+		return getDexterity () + getBonusDexterity ();
+	}
+	
+	public int getTotalLuck ()
+	{
+		return getLuck () + getBonusLuck ();
+	}
+	
 	public int getDamage ()
 	{
 		int dmg = getMinDamage () + (int) (Math.random () * (getMaxDamage () - getMinDamage() + 1));
@@ -90,22 +181,22 @@ public class Hero extends Entity
 	
 	public int getMinDamage ()
 	{
-		return Formula.calculateMinDamage (getStrength ());
+		return Formula.calculateMinDamage (getTotalStrength ());
 	}
 	
 	public int getMaxDamage ()
 	{
-		return Formula.calculateMaxDamage (getStrength ());
+		return Formula.calculateMaxDamage (getTotalStrength ());
 	}
 	
 	public int getAttackSpeed ()
 	{
-		return (int) (Formula.calculateAttackSpeed (getDexterity ()) * 100);
+		return (int) (Formula.calculateAttackSpeed (getTotalDexterity ()) * 100);
 	}
 	
 	public int getCritChance ()
 	{
-		return Formula.calculateCritChance (getLuck ());
+		return Formula.calculateCritChance (getTotalLuck ());
 	}
 	
 	public int getCritDamage ()
@@ -116,7 +207,7 @@ public class Hero extends Entity
 	@Override
 	public int getMaxHealth ()
 	{
-		return Formula.calculateHealth (getVitality ());
+		return Formula.calculateHealth (getTotalVitality ());
 	}
 	
 	public void increaseExp (int amount)
