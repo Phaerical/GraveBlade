@@ -46,9 +46,6 @@ public class StatsWindow extends Window
 		
 		open = false;
 		
-		NinePatch np = new NinePatch (new Texture (Gdx.files.internal ("backgrounds/window.png")), 10, 10, 10, 10);
-		NinePatchDrawable npd = new NinePatchDrawable (np);
-		
 		//*************************************
 		// WINDOW PROPERTIES
 		//*************************************
@@ -56,7 +53,6 @@ public class StatsWindow extends Window
 		setKeepWithinStage (false);
 		setSize (820, 390);
 		setPosition (-getWidth(), 80);
-		setBackground (npd);
 		padTop(70);
 		padLeft (35);
 		padRight (35);
