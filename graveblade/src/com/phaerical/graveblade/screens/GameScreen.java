@@ -216,9 +216,9 @@ public class GameScreen extends BasicScreen
 			camera.position.y += tY * lerp;
 			camera.update ();
 			
-			ui.getSpriteBatch().begin ();
+			/*ui.getSpriteBatch().begin ();
 			ui.getSpriteBatch().draw (background, 0, 0);
-			ui.getSpriteBatch().end ();
+			ui.getSpriteBatch().end ();*/
 			
 			renderer.setView (camera);
 			renderer.render ();

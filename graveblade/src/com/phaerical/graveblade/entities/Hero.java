@@ -35,6 +35,7 @@ public class Hero extends Entity
 	private TextureAtlas atlas;
 	
 	private Array<Item> equipment;
+	private Array<Item> inventory;
 	
 	private GraveBlade game;
 	
@@ -52,13 +53,22 @@ public class Hero extends Entity
 		Item glove = new Item ("Beginner Gloves", ItemType.GLOVE, itemAtlas.createSprite("glove1"), 1, 4, 4, 4, 4);
 		Item boots = new Item ("Beginner Boots", ItemType.BOOTS, itemAtlas.createSprite("boots1"), 1, 4, 4, 4, 4);
 		Item weapon = new Item ("Beginner Sword", ItemType.WEAPON, itemAtlas.createSprite("sword1"), 1, 4, 4, 4, 4);
+		Item misc = new Item ("Lucky Earrings", ItemType.MISC, itemAtlas.createSprite("earring1"), 1, 0, 0, 0, 10);
 		
-		this.equipment = new Array<Item> (true, 5);
+		this.equipment = new Array<Item> (true, 6);
 		this.equipment.add (helmet);
 		this.equipment.add (armor);
 		this.equipment.add (glove);
 		this.equipment.add (boots);
 		this.equipment.add (weapon);
+		this.equipment.add (misc);
+		
+		this.inventory = new Array<Item> (true, 24);
+		this.inventory.add (helmet);
+		this.inventory.add (armor);
+		this.inventory.add (helmet);
+		this.inventory.add (weapon);
+		this.inventory.add (weapon);
 		
 		this.setSpeed (8f);
 		this.setJumpSpeed (15f);
@@ -105,6 +115,11 @@ public class Hero extends Entity
 	public Array<Item> getEquipment ()
 	{
 		return equipment;
+	}
+	
+	public Array<Item> getInventory ()
+	{
+		return inventory;
 	}
 	
 	public int getBonusStrength ()

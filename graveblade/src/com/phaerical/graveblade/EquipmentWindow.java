@@ -5,21 +5,26 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array.ArrayIterator;
@@ -53,16 +58,42 @@ public class EquipmentWindow extends Window
 		padTop (70);
 		padLeft (35);
 		padRight (35);
+		padBottom (25);
 		left ();
-		
-		right ();
 		
 		tooltip = new Label ("", skin, "tooltip");
 		tooltip.setAlignment (Align.center, Align.left);
-		tooltip.setPosition(0, 0);
-		tooltip.setVisible (false);
+		tooltip.setPosition (0, 0);
+		tooltip.addAction (Actions.alpha(0));
 		
-		TextureAtlas itemAtlas = new TextureAtlas (Gdx.files.internal ("sprites/items.pack"));
+		Table tblEquipment = new Table ();
+		
+		ArrayIterator<Item> iter = new ArrayIterator<Item> (hero.getEquipment ());
+		
+		while (iter.hasNext ())
+		{
+			Item item = iter.next ();
+			item.addListener (new TooltipManager (tooltip, item.getTooltip ()));
+			
+			Label lbl = new Label (item.getType().toString(), skin, "small");
+			
+			Table tbl = new Table ();
+			tbl.setBackground (skin.getDrawable ("dark-box"));
+			tbl.pad (15, 23, 15, 23);
+			tbl.add (lbl).align (Align.center).spaceBottom (11).row ();
+			tbl.add (item).size (64, 64);
+			
+			tblEquipment.add (tbl).space (4);
+			
+			if (item.getType() == ItemType.GLOVE)
+			{
+				tblEquipment.row ();
+			}
+		}
+		
+		Table tblInventory = new Table ();
+		
+		tblInventory.right ();
 		
 		for (int i = 0; i < 24; i++)
 		{
@@ -70,108 +101,27 @@ public class EquipmentWindow extends Window
 			ImageButton btn = new ImageButton (style);
 			
 			style.up = skin.getDrawable("box");
-			style.imageUp = new SpriteDrawable (itemAtlas.createSprite ("sword1"));
 			
-			btn.addListener (new InputListener ()
+			// Fill in inventory
+			if (i < hero.getInventory().size)
 			{
-				@Override
-				public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor)
-				{
-					tooltip.setText ("hi");
-					tooltip.setSize (tooltip.getPrefWidth() + 30, tooltip.getPrefHeight() + 30);
-					tooltip.setVisible (true);
-				}
+				Item item = hero.getInventory().get (i);
 				
-				@Override
-				public void exit (InputEvent event, float x, float y, int pointer, Actor toActor)
-				{
-					tooltip.setVisible (false);
-				}
+				style.imageUp = item.getDrawable ();
 				
-				@Override
-				public boolean mouseMoved (InputEvent event, float x, float y)
-				{
-					float tX = x + event.getListenerActor().getX() + tooltip.getWidth () / 2 + 10;
-					float tY = y + event.getListenerActor().getY() - tooltip.getHeight () / 2;
-					
-					// Handle tooltip clipping
-					if (tX + tooltip.getWidth () > event.getStage().getWidth ())
-					{
-						tX = x + event.getListenerActor().getX() - tooltip.getWidth () / 2 + 10;
-					}
-					
-					if (tY < 0)
-					{
-						tY = 0;
-					}
-					
-					tooltip.setPosition (tX, tY);
-					
-					return true;
-				}
-			});
+				btn.addListener (new TooltipManager (tooltip, item.getTooltip ()));
+			}
 			
-			add (btn).size (64, 64).spaceRight (4).spaceBottom (4);
+			tblInventory.add (btn).size (64, 64).spaceRight (4).spaceBottom (4);
 			
 			if ((i + 1) % 6 == 0)
 			{
-				row ();
+				tblInventory.row ();
 			}
 		}
 		
-		row ();
-		
-		ArrayIterator<Item> iter = new ArrayIterator<Item> (hero.getEquipment ());
-		
-		/*
-		while (iter.hasNext ())
-		{
-			Item item = iter.next ();
-			
-			item.addListener (new InputListener ()
-			{
-				@Override
-				public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor)
-				{
-					Item i = (Item) event.getListenerActor ();
-					tooltip.setText (i.getTooltip ());
-					tooltip.setSize (tooltip.getPrefWidth() + 30, tooltip.getPrefHeight() + 30);
-					tooltip.setVisible (true);
-				}
-				
-				@Override
-				public void exit (InputEvent event, float x, float y, int pointer, Actor toActor)
-				{
-					tooltip.setVisible (false);
-				}
-				
-				@Override
-				public boolean mouseMoved (InputEvent event, float x, float y)
-				{
-					float tX = x + event.getListenerActor().getX() + tooltip.getWidth () / 2 + 10;
-					float tY = y + event.getListenerActor().getY() - tooltip.getHeight () / 2;
-					
-					// Handle tooltip clipping
-					if (tX + tooltip.getWidth () > event.getStage().getWidth ())
-					{
-						tX = x + event.getListenerActor().getX() - tooltip.getWidth () / 2 + 10;
-					}
-					
-					if (tY < 0)
-					{
-						tY = 0;
-					}
-					
-					tooltip.setPosition (tX, tY);
-					
-					return true;
-				}
-			});
-			
-			add (item).size(64, 64).spaceRight (50);
-		}*/
-		
-		
+		add (tblEquipment).spaceRight (30).expand ().bottom().left();
+		add (tblInventory).bottom ();
 	}
 	
 	public void show ()
