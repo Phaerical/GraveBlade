@@ -1,33 +1,14 @@
 package com.phaerical.graveblade;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.utils.Array.ArrayIterator;
 import com.phaerical.graveblade.Item.ItemType;
 import com.phaerical.graveblade.entities.Hero;
 
@@ -36,15 +17,18 @@ public class EquipmentWindow extends Window
 	private boolean open;
 	
 	private Label tooltip;
-	//private ImageButton equip;
+	
+	private boolean needUpdate;
 	
 	private Hero hero;
+	private Skin skin;
 	
 	public EquipmentWindow (Skin skin, Hero h)
 	{
 		super ("EQUIPMENT", skin);
 		
 		this.hero = h;
+		this.skin = skin;
 		
 		open = false;
 		
@@ -63,33 +47,83 @@ public class EquipmentWindow extends Window
 		
 		tooltip = new Label ("", skin, "tooltip");
 		tooltip.setAlignment (Align.center, Align.left);
-		tooltip.setPosition (0, 0);
-		tooltip.addAction (Actions.alpha(0));
+		tooltip.setPosition (-100, -100);
+		tooltip.addAction (Actions.alpha (0));
+		
+		this.needUpdate = true;
+	}
+	
+	@Override
+	public void act (float delta)
+	{
+		super.act (delta);
+		
+		if (needUpdate)
+		{
+			update ();
+			needUpdate = false;
+		}
+	}
+	
+	public void update ()
+	{
+		clear ();
 		
 		Table tblEquipment = new Table ();
 		
-		ArrayIterator<Item> iter = new ArrayIterator<Item> (hero.getEquipment ());
-		
-		while (iter.hasNext ())
+		for (int i = 0; i < 6; i++)
 		{
-			Item item = iter.next ();
-			item.addListener (new TooltipManager (tooltip, item.getTooltip ()));
-			
-			Label lbl = new Label (item.getType().toString(), skin, "small");
-			
 			Table tbl = new Table ();
 			tbl.setBackground (skin.getDrawable ("dark-box"));
 			tbl.pad (15, 23, 15, 23);
-			tbl.add (lbl).align (Align.center).spaceBottom (11).row ();
-			tbl.add (item).size (64, 64);
+			
+			for (ItemType it : ItemType.values ())
+			{
+				if (it.getIndex () == i)
+				{
+					Label lbl = new Label (it.toString (), skin, "small");
+					tbl.add (lbl).align (Align.center).spaceBottom (11).row ();
+					
+					if (hero.getEquipment().isSlotEmpty(i))
+					{
+						Image img = new Image (skin.getDrawable ("equip-" + it.toString().toLowerCase()));
+						tbl.add (img).size (64, 64);
+					}
+					
+					break;
+				}
+			}
+			
+			if (!hero.getEquipment().isSlotEmpty (i))
+			{
+				Item item = hero.getEquipment().getEquip (i);
+				tbl.add (item).size (64, 64);
+				
+				item.clearListeners ();
+				
+				item.addListener (new TooltipManager (tooltip, item.getTooltip ())
+				{
+					public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
+					{
+						if (button == 1)
+						{
+							hero.getEquipment().removeEquip ((Item) event.getListenerActor ());
+							needUpdate = true;
+						}
+						
+						return true;
+					}
+				});
+			}
 			
 			tblEquipment.add (tbl).space (4);
 			
-			if (item.getType() == ItemType.GLOVE)
+			if (i == 2)
 			{
 				tblEquipment.row ();
 			}
 		}
+		
 		
 		Table tblInventory = new Table ();
 		
@@ -97,22 +131,32 @@ public class EquipmentWindow extends Window
 		
 		for (int i = 0; i < 24; i++)
 		{
-			ImageButtonStyle style = new ImageButtonStyle ();
-			ImageButton btn = new ImageButton (style);
+			Table tbl = new Table ();
+			tbl.setBackground (skin.getDrawable ("box"));
 			
-			style.up = skin.getDrawable("box");
-			
-			// Fill in inventory
 			if (i < hero.getInventory().size)
 			{
-				Item item = hero.getInventory().get (i);
+				Item item = hero.getInventory().get(i);
+				tbl.add (item);
 				
-				style.imageUp = item.getDrawable ();
+				item.clearListeners ();
 				
-				btn.addListener (new TooltipManager (tooltip, item.getTooltip ()));
+				item.addListener (new TooltipManager (tooltip, item.getTooltip ())
+				{
+					public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
+					{
+						if (button == 1)
+						{
+							hero.getEquipment().equipFromInventory ((Item) event.getListenerActor ());
+							needUpdate = true;
+						}
+						
+						return true;
+					}
+				});
 			}
 			
-			tblInventory.add (btn).size (64, 64).spaceRight (4).spaceBottom (4);
+			tblInventory.add (tbl).size(64, 64).space (4);
 			
 			if ((i + 1) % 6 == 0)
 			{

@@ -2,14 +2,25 @@ package com.phaerical.graveblade;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 public class Item extends Image
 {
 	public enum ItemType
 	{
-		HELMET, ARMOR, GLOVE, BOOTS, WEAPON, MISC
+		HELM (0), ARMOR (1), GLOVES (2), BOOTS (3), WEAPON (4), MISC (5);
+		
+		private int index;
+		
+		private ItemType (int index)
+		{
+			this.index = index;
+		}
+		
+		public int getIndex ()
+		{
+			return index;
+		}
 	}
 	
 	private String name;

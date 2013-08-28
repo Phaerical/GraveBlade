@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Array.ArrayIterator;
+import com.phaerical.graveblade.EquipmentManager;
+import com.phaerical.graveblade.EquipmentManager.Stat;
 import com.phaerical.graveblade.ExperienceTable;
 import com.phaerical.graveblade.Formula;
 import com.phaerical.graveblade.GraveBlade;
@@ -34,8 +34,10 @@ public class Hero extends Entity
 	
 	private TextureAtlas atlas;
 	
-	private Array<Item> equipment;
+	//private Array<Item> equipment;
 	private Array<Item> inventory;
+	
+	private EquipmentManager equipment;
 	
 	private GraveBlade game;
 	
@@ -48,27 +50,28 @@ public class Hero extends Entity
 		this.game = game;
 		
 		TextureAtlas itemAtlas = new TextureAtlas (Gdx.files.internal ("sprites/items.pack"));
-		Item helmet = new Item ("Beginner Helmet", ItemType.HELMET, itemAtlas.createSprite("helm1"), 1, 4, 4, 4, 4);
+		Item helmet = new Item ("Beginner Helmet", ItemType.HELM, itemAtlas.createSprite("helm1"), 1, 4, 4, 4, 4);
 		Item armor = new Item ("Beginner Armor", ItemType.ARMOR, itemAtlas.createSprite("armor1"), 1, 4, 4, 4, 4);
-		Item glove = new Item ("Beginner Gloves", ItemType.GLOVE, itemAtlas.createSprite("glove1"), 1, 4, 4, 4, 4);
+		Item glove = new Item ("Beginner Gloves", ItemType.GLOVES, itemAtlas.createSprite("glove1"), 1, 4, 4, 4, 4);
 		Item boots = new Item ("Beginner Boots", ItemType.BOOTS, itemAtlas.createSprite("boots1"), 1, 4, 4, 4, 4);
 		Item weapon = new Item ("Beginner Sword", ItemType.WEAPON, itemAtlas.createSprite("sword1"), 1, 4, 4, 4, 4);
 		Item misc = new Item ("Lucky Earrings", ItemType.MISC, itemAtlas.createSprite("earring1"), 1, 0, 0, 0, 10);
 		
-		this.equipment = new Array<Item> (true, 6);
-		this.equipment.add (helmet);
-		this.equipment.add (armor);
-		this.equipment.add (glove);
-		this.equipment.add (boots);
-		this.equipment.add (weapon);
-		this.equipment.add (misc);
+		this.equipment = new EquipmentManager (this);
+		
+		this.equipment.equip (helmet);
+		this.equipment.equip (armor);
+		this.equipment.equip (glove);
+		this.equipment.equip (boots);
+		this.equipment.equip (weapon);
+		this.equipment.equip (misc);
 		
 		this.inventory = new Array<Item> (true, 24);
-		this.inventory.add (helmet);
-		this.inventory.add (armor);
-		this.inventory.add (helmet);
-		this.inventory.add (weapon);
-		this.inventory.add (weapon);
+		this.inventory.add (new Item ("Beginner Helmet", ItemType.HELM, itemAtlas.createSprite("helm1"), 1, 4, 4, 4, 4));
+		this.inventory.add (new Item ("Beginner Armor", ItemType.ARMOR, itemAtlas.createSprite("armor1"), 1, 4, 4, 4, 4));
+		this.inventory.add (new Item ("Beginner Helmet", ItemType.HELM, itemAtlas.createSprite("helm1"), 1, 4, 4, 4, 4));
+		this.inventory.add (new Item ("Beginner Sword", ItemType.WEAPON, itemAtlas.createSprite("sword1"), 1, 4, 4, 4, 4));
+		this.inventory.add (new Item ("Beginner Sword", ItemType.WEAPON, itemAtlas.createSprite("sword1"), 1, 4, 4, 4, 4));
 		
 		this.setSpeed (8f);
 		this.setJumpSpeed (15f);
@@ -112,7 +115,7 @@ public class Hero extends Entity
 		this.setDeathAnimation (new Animation (0.7f, atlas.createSprites ("hurt")));
 	}
 	
-	public Array<Item> getEquipment ()
+	public EquipmentManager getEquipment ()
 	{
 		return equipment;
 	}
@@ -124,54 +127,22 @@ public class Hero extends Entity
 	
 	public int getBonusStrength ()
 	{
-		ArrayIterator<Item> iter = new ArrayIterator<Item> (equipment);
-		int amount = 0;
-		
-		while (iter.hasNext ())
-		{
-			amount += iter.next().getStrength ();
-		}
-		
-		return amount;
+		return equipment.getBonusStats (Stat.STRENGTH);
 	}
 	
 	public int getBonusVitality ()
 	{
-		ArrayIterator<Item> iter = new ArrayIterator<Item> (equipment);
-		int amount = 0;
-		
-		while (iter.hasNext ())
-		{
-			amount += iter.next().getVitality ();
-		}
-		
-		return amount;
+		return equipment.getBonusStats (Stat.VITALITY);
 	}
 	
 	public int getBonusDexterity ()
 	{
-		ArrayIterator<Item> iter = new ArrayIterator<Item> (equipment);
-		int amount = 0;
-		
-		while (iter.hasNext ())
-		{
-			amount += iter.next().getDexterity ();
-		}
-		
-		return amount;
+		return equipment.getBonusStats (Stat.DEXTERITY);
 	}
 	
 	public int getBonusLuck ()
 	{
-		ArrayIterator<Item> iter = new ArrayIterator<Item> (equipment);
-		int amount = 0;
-		
-		while (iter.hasNext ())
-		{
-			amount += iter.next().getLuck ();
-		}
-		
-		return amount;
+		return equipment.getBonusStats (Stat.LUCK);
 	}
 	
 	public int getTotalStrength ()
