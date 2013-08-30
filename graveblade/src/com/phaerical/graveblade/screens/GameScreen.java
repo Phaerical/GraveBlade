@@ -12,7 +12,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.phaerical.graveblade.Controller;
 import com.phaerical.graveblade.EquipmentWindow;
 import com.phaerical.graveblade.FloatingText;
@@ -127,6 +129,13 @@ public class GameScreen extends BasicScreen
 		ft = new FloatingText ();
 		stage.addActor (ft);
 		
+		Label tooltip = new Label ("", skin, "tooltip");
+		tooltip.setName ("tooltip");
+		tooltip.setAlignment (Align.center, Align.left);
+		tooltip.setVisible (false);
+		
+		ui.addActor (tooltip);
+		
 		InputMultiplexer im = new InputMultiplexer (stage, ui);
 		
 		cursor = new Texture (Gdx.files.internal ("sprites/cursor.png"));
@@ -141,12 +150,10 @@ public class GameScreen extends BasicScreen
 		if (statsWindow.isOpen ())
 		{
 			statsWindow.hide ();
-			state = State.RUNNING;
 		}
 		else
 		{
 			statsWindow.show ();
-			state = State.VIEW_WINDOW;
 		}
 	}
 	
@@ -216,9 +223,9 @@ public class GameScreen extends BasicScreen
 			camera.position.y += tY * lerp;
 			camera.update ();
 			
-			/*ui.getSpriteBatch().begin ();
+			ui.getSpriteBatch().begin ();
 			ui.getSpriteBatch().draw (background, 0, 0);
-			ui.getSpriteBatch().end ();*/
+			ui.getSpriteBatch().end ();
 			
 			renderer.setView (camera);
 			renderer.render ();
@@ -233,7 +240,6 @@ public class GameScreen extends BasicScreen
 		}
 		
 		ui.draw ();
-		
 		
 		// Keep cursor within the screen
 		if (Gdx.input.getX () < 0)

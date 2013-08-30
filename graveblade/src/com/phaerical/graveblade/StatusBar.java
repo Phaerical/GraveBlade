@@ -8,11 +8,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.phaerical.graveblade.entities.Hero;
 
 public class StatusBar extends Table
@@ -25,6 +28,8 @@ public class StatusBar extends Table
 	private Slider healthBar;
 	private Slider manaBar;
 	private Slider expBar;
+	
+	private Label tooltip;
 	
 	public StatusBar (Hero hero)
 	{
@@ -74,6 +79,15 @@ public class StatusBar extends Table
 		add (btnEquipment).width(45).height(45).spaceRight (4);
 		add (btnSkills).width(45).height(45).spaceRight (4);
 		add (btnSettings).width(45).height(45).spaceRight (4);
+		
+		tooltip = new Label ("", skin, "tooltip");
+		tooltip.setAlignment (Align.center, Align.left);
+		tooltip.setPosition (-100, -100);
+		tooltip.addAction (Actions.alpha (0));
+		
+		//TooltipManager tm = new TooltipManager ("STATS");
+		
+		//btnStats.addListener (tm.getListener ());
 	}
 	
 	@Override

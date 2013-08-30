@@ -1,7 +1,11 @@
 package com.phaerical.graveblade;
 
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -15,8 +19,6 @@ import com.phaerical.graveblade.entities.Hero;
 public class EquipmentWindow extends Window
 {
 	private boolean open;
-	
-	private Label tooltip;
 	
 	private boolean needUpdate;
 	
@@ -44,11 +46,6 @@ public class EquipmentWindow extends Window
 		padRight (35);
 		padBottom (25);
 		left ();
-		
-		tooltip = new Label ("", skin, "tooltip");
-		tooltip.setAlignment (Align.center, Align.left);
-		tooltip.setPosition (-100, -100);
-		tooltip.addAction (Actions.alpha (0));
 		
 		this.needUpdate = true;
 	}
@@ -99,13 +96,15 @@ public class EquipmentWindow extends Window
 				Item item = hero.getEquipment().getEquip (i);
 				tbl.add (item).size (64, 64);
 				
-				item.clearListeners ();
+				TooltipManager tm = new TooltipManager ((Label) getStage().getRoot().findActor ("tooltip"), item.getTooltip ());
+				tbl.setTouchable (Touchable.enabled);
+				tbl.addListener (tm.getListener ());
 				
-				item.addListener (new TooltipManager (tooltip, item.getTooltip ())
-				{
+				item.clearListeners ();
+				item.addListener (new InputListener () {
 					public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
 					{
-						if (button == 1)
+						if (button == Buttons.RIGHT)
 						{
 							hero.getEquipment().removeEquip ((Item) event.getListenerActor ());
 							needUpdate = true;
@@ -139,13 +138,16 @@ public class EquipmentWindow extends Window
 				Item item = hero.getInventory().get(i);
 				tbl.add (item);
 				
-				item.clearListeners ();
+				TooltipManager tm = new TooltipManager ((Label) getStage().getRoot().findActor ("tooltip"), item.getTooltip ());
+				tbl.setTouchable (Touchable.enabled);
+				tbl.addListener (tm.getListener ());
 				
-				item.addListener (new TooltipManager (tooltip, item.getTooltip ())
+				item.clearListeners ();
+				item.addListener (new InputListener ()
 				{
 					public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
 					{
-						if (button == 1)
+						if (button == Buttons.RIGHT)
 						{
 							hero.getEquipment().equipFromInventory ((Item) event.getListenerActor ());
 							needUpdate = true;
@@ -170,15 +172,13 @@ public class EquipmentWindow extends Window
 	
 	public void show ()
 	{
-		addAction (Actions.moveTo (100, 80, 0.15f));
-		getStage().addActor (tooltip);
-		toFront ();
+		addAction (Actions.moveTo (100, 80, 0.5f, Interpolation.swingOut));
 		open = true;
 	}
 	
 	public void hide ()
 	{
-		addAction (Actions.moveTo (-getWidth(), 80, 0.15f));
+		addAction (Actions.moveTo (-getWidth(), 80, 0.5f, Interpolation.swingIn));
 		open = false;
 	}
 	
@@ -191,10 +191,5 @@ public class EquipmentWindow extends Window
 	public void draw (SpriteBatch batch, float parentAlpha)
 	{
 		super.draw (batch, parentAlpha);
-		
-		if (tooltip.isVisible ())
-		{
-			tooltip.draw (batch, parentAlpha);
-		}
 	}
 }
