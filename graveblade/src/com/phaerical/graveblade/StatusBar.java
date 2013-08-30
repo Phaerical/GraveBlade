@@ -7,19 +7,20 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.phaerical.graveblade.entities.Hero;
+import com.phaerical.graveblade.screens.GameScreen;
 
 public class StatusBar extends Table
 {
+	private GameScreen game;
 	private Hero hero;
 	private BitmapFont font;
 	private FreeTypeFontGenerator generator;
@@ -29,11 +30,15 @@ public class StatusBar extends Table
 	private Slider manaBar;
 	private Slider expBar;
 	
-	private Label tooltip;
+	private ImageButton btnStats;
+	private ImageButton btnEquipment;
+	private ImageButton btnSkills;
+	private ImageButton btnSettings;
 	
-	public StatusBar (Hero hero)
+	public StatusBar (GameScreen g)
 	{
-		this.hero = hero;
+		this.game = g;
+		this.hero = game.getHero ();
 		
 		generator = new FreeTypeFontGenerator (Gdx.files.internal ("fonts/pixel_font.ttf"));
 		font = generator.generateFont (16);
@@ -66,10 +71,10 @@ public class StatusBar extends Table
 		expBar = new Slider (0, 100, 0.1f, false, skin, "exp-bar");
 		expBar.setTouchable (Touchable.disabled);
 		
-		ImageButton btnStats = new ImageButton (skin, "person");
-		ImageButton btnEquipment = new ImageButton (skin, "sword");
-		ImageButton btnSkills = new ImageButton (skin, "magic");
-		ImageButton btnSettings = new ImageButton (skin, "gear");
+		btnStats = new ImageButton (skin, "person");
+		btnEquipment = new ImageButton (skin, "sword");
+		btnSkills = new ImageButton (skin, "magic");
+		btnSettings = new ImageButton (skin, "gear");
 		
 		add (levelBar).width(100).height(45).spaceRight (4);
 		add (healthBar).width(250).spaceRight (4);
@@ -80,14 +85,28 @@ public class StatusBar extends Table
 		add (btnSkills).width(45).height(45).spaceRight (4);
 		add (btnSettings).width(45).height(45).spaceRight (4);
 		
-		tooltip = new Label ("", skin, "tooltip");
-		tooltip.setAlignment (Align.center, Align.left);
-		tooltip.setPosition (-100, -100);
-		tooltip.addAction (Actions.alpha (0));
+		btnStats.addListener ((new TooltipManager (game.getTooltip(), "STATS (U)", 0, 70).getListener ()));
+		btnEquipment.addListener ((new TooltipManager (game.getTooltip(), "EQUIPMENT (I)", 0, 70).getListener ()));
+		btnSkills.addListener ((new TooltipManager (game.getTooltip(), "SKILLS (K)", 0, 70).getListener ()));
+		btnSettings.addListener ((new TooltipManager (game.getTooltip(), "SETTINGS (O)", 0, 70).getListener ()));
 		
-		//TooltipManager tm = new TooltipManager ("STATS");
+		btnStats.addListener (new InputListener ()
+		{
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
+			{
+				game.triggerStatsWindow ();
+				return true;
+			}
+		});
 		
-		//btnStats.addListener (tm.getListener ());
+		btnEquipment.addListener (new InputListener ()
+		{
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
+			{
+				game.triggerEquipmentWindow ();
+				return true;
+			}
+		});
 	}
 	
 	@Override
@@ -96,6 +115,24 @@ public class StatusBar extends Table
 		levelBar.setText ("LEVEL " + hero.getLevel ());
 		healthBar.setValue ((float) hero.getHealth () / hero.getMaxHealth () * 100);
 		expBar.setValue ((float) hero.getExp() / hero.getMaxExp() * 100);
+		
+		if (game.getStatsWindow().isOpen ())
+		{
+			btnStats.setChecked (true);
+		}
+		else
+		{
+			btnStats.setChecked (false);
+		}
+		
+		if (game.getEquipmentWindow().isOpen ())
+		{
+			btnEquipment.setChecked (true);
+		}
+		else
+		{
+			btnEquipment.setChecked (false);
+		}
 	}
 	
 	@Override

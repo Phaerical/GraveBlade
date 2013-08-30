@@ -50,11 +50,13 @@ public class GameScreen extends BasicScreen
 	private Poring poring;
 	private Mushroom mushroom;
 	
+	private Label tooltip;
+	
 	private Texture cursor;
 	
 	private float mouseActiveTime;
 	
-	Texture background;
+	private Texture background;
 	
 	public enum State
 	{
@@ -84,7 +86,7 @@ public class GameScreen extends BasicScreen
 		camera = new OrthographicCamera ();
 		camera.setToOrtho (false, 1024, 576);
 		
-		hero = new Hero (game, map);
+		hero = new Hero (map);
 		hero.setPosition(500, 200);
 		stage.addActor (hero);
 		
@@ -103,38 +105,36 @@ public class GameScreen extends BasicScreen
 			//stage.addActor (mushroom);
 		}
 		
-		controller = new Controller (hero, this);
+		ft = new FloatingText ();
+		stage.addActor (ft);
 		
+		controller = new Controller (hero, this);
 		stage.addListener (controller);
 		
-		ui = new Stage ();
-		
-		StatusBar status = new StatusBar (hero);
-		ui.addActor (status);
-		
-		pauseWindow = new PauseWindow (game);
-		ui.addActor (pauseWindow);
 		
 		TextureAtlas atlas = new TextureAtlas (Gdx.files.internal ("skins/ui-skin.atlas"));
 		
 		Skin skin = new Skin (Gdx.files.internal ("skins/ui-skin.json"));
 		skin.addRegions (atlas);
 		
+		ui = new Stage ();
+		
+		tooltip = new Label ("", skin, "tooltip");
+		tooltip.setName ("tooltip");
+		tooltip.setAlignment (Align.center, Align.left);
+		tooltip.setVisible (false);
+		ui.addActor (tooltip);
+		
+		ui.addActor (new StatusBar (this));
+		
+		pauseWindow = new PauseWindow (game);
+		ui.addActor (pauseWindow);
+		
 		statsWindow = new StatsWindow (skin, hero);
 		ui.addActor (statsWindow);
 		
 		equipWindow = new EquipmentWindow (skin, hero);
 		ui.addActor (equipWindow);
-		
-		ft = new FloatingText ();
-		stage.addActor (ft);
-		
-		Label tooltip = new Label ("", skin, "tooltip");
-		tooltip.setName ("tooltip");
-		tooltip.setAlignment (Align.center, Align.left);
-		tooltip.setVisible (false);
-		
-		ui.addActor (tooltip);
 		
 		InputMultiplexer im = new InputMultiplexer (stage, ui);
 		
@@ -167,6 +167,26 @@ public class GameScreen extends BasicScreen
 		{
 			equipWindow.show ();
 		}
+	}
+	
+	public StatsWindow getStatsWindow ()
+	{
+		return statsWindow;
+	}
+	
+	public EquipmentWindow getEquipmentWindow ()
+	{
+		return equipWindow;
+	}
+	
+	public Hero getHero ()
+	{
+		return hero;
+	}
+	
+	public Label getTooltip ()
+	{
+		return tooltip;
 	}
 	
 	

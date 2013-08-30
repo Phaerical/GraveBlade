@@ -12,7 +12,6 @@ import com.phaerical.graveblade.EquipmentManager;
 import com.phaerical.graveblade.EquipmentManager.Stat;
 import com.phaerical.graveblade.ExperienceTable;
 import com.phaerical.graveblade.Formula;
-import com.phaerical.graveblade.GraveBlade;
 import com.phaerical.graveblade.Item;
 import com.phaerical.graveblade.Item.ItemType;
 import com.phaerical.graveblade.SoundManager;
@@ -39,15 +38,11 @@ public class Hero extends Entity
 	
 	private EquipmentManager equipment;
 	
-	private GraveBlade game;
-	
 	private float invincibleTime;
 	
-	public Hero (GraveBlade game, TiledMap map)
+	public Hero (TiledMap map)
 	{
 		super (map);
-		
-		this.game = game;
 		
 		TextureAtlas itemAtlas = new TextureAtlas (Gdx.files.internal ("sprites/items.pack"));
 		Item helmet = new Item ("Beginner Helmet", ItemType.HELM, itemAtlas.createSprite("helm1"), 1, 4, 4, 4, 4);
