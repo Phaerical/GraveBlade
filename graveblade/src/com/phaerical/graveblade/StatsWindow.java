@@ -1,5 +1,6 @@
 package com.phaerical.graveblade;
 
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.phaerical.graveblade.entities.Hero;
+import com.phaerical.graveblade.screens.GameScreen;
 
 public class StatsWindow extends Window
 {
@@ -33,12 +35,14 @@ public class StatsWindow extends Window
 	private TextButton btnLuck;
 	
 	private Hero hero;
+	private GameScreen game;
 	
-	public StatsWindow (Skin skin, Hero h)
+	public StatsWindow (GameScreen g)
 	{
-		super ("STATS", skin);
+		super ("STATS", Assets.skin);
 		
-		this.hero = h;
+		this.game = g;
+		this.hero = game.getHero ();
 		
 		open = false;
 		
@@ -48,7 +52,7 @@ public class StatsWindow extends Window
 		setMovable (false);
 		setKeepWithinStage (false);
 		setSize (820, 390);
-		setPosition (-getWidth(), 80);
+		setPosition (100, GameScreen.HEIGHT + getHeight ());
 		padTop(70);
 		padLeft (35);
 		padRight (35);
@@ -58,26 +62,26 @@ public class StatsWindow extends Window
 		//*************************************
 		// STAT LABELS
 		//*************************************
-		statPoints = new Label ("", skin, "small");
-		statLevel = new TextButton ("", skin, "box");
-		statHealth = new TextButton ("", skin, "box");
-		statStrength = new TextButton ("", skin, "box");
-		statVitality = new TextButton ("", skin, "box");
-		statDexterity = new TextButton ("", skin, "box");
-		statLuck = new TextButton ("", skin, "box");
-		statAttackSpeed = new TextButton ("", skin, "box");
-		statAttackDamage = new TextButton ("", skin, "box");
-		statCritChance = new TextButton ("", skin, "box");
-		statCritDamage = new TextButton ("", skin, "box");
+		statPoints = new Label ("", Assets.skin, "small");
+		statLevel = new TextButton ("", Assets.skin, "box");
+		statHealth = new TextButton ("", Assets.skin, "box");
+		statStrength = new TextButton ("", Assets.skin, "box");
+		statVitality = new TextButton ("", Assets.skin, "box");
+		statDexterity = new TextButton ("", Assets.skin, "box");
+		statLuck = new TextButton ("", Assets.skin, "box");
+		statAttackSpeed = new TextButton ("", Assets.skin, "box");
+		statAttackDamage = new TextButton ("", Assets.skin, "box");
+		statCritChance = new TextButton ("", Assets.skin, "box");
+		statCritDamage = new TextButton ("", Assets.skin, "box");
 		
 		
 		//*************************************
 		// STAT BUTTONS
 		//*************************************
-		btnStrength = new TextButton ("+STRENGTH", skin);
-		btnVitality = new TextButton ("+VITALITY", skin);
-		btnDexterity = new TextButton ("+DEXTERITY", skin);
-		btnLuck = new TextButton ("+LUCK", skin);
+		btnStrength = new TextButton ("+STRENGTH", Assets.skin);
+		btnVitality = new TextButton ("+VITALITY", Assets.skin);
+		btnDexterity = new TextButton ("+DEXTERITY", Assets.skin);
+		btnLuck = new TextButton ("+LUCK", Assets.skin);
 		
 		btnStrength.addListener (new ChangeListener () {
 			@Override
@@ -132,29 +136,29 @@ public class StatsWindow extends Window
 		tbl.columnDefaults(2).align (Align.left).width (180);
 		tbl.columnDefaults(3).align (Align.right).width (90).padLeft(-4);
 		
-		tbl.add (new TextButton ("LEVEL", skin, "box"));
+		tbl.add (new TextButton ("LEVEL", Assets.skin, "box"));
 		tbl.add (statLevel);
-		tbl.add (new TextButton ("HEALTH", skin, "box"));
+		tbl.add (new TextButton ("HEALTH", Assets.skin, "box"));
 		tbl.add (statHealth);
 		tbl.row ().spaceTop(30);
 		
-		tbl.add (new TextButton ("STRENGTH", skin, "box"));
+		tbl.add (new TextButton ("STRENGTH", Assets.skin, "box"));
 		tbl.add (statStrength);
-		tbl.add (new TextButton ("VITALITY", skin, "box"));
+		tbl.add (new TextButton ("VITALITY", Assets.skin, "box"));
 		tbl.add (statVitality).row ().spaceTop (4);
-		tbl.add (new TextButton ("DEXTERITY", skin, "box"));
+		tbl.add (new TextButton ("DEXTERITY", Assets.skin, "box"));
 		tbl.add (statDexterity);
-		tbl.add (new TextButton ("LUCK", skin, "box"));
+		tbl.add (new TextButton ("LUCK", Assets.skin, "box"));
 		tbl.add (statLuck);
 		tbl.row ().spaceTop(30);
 		
-		tbl.add (new TextButton ("ATTACK SPEED", skin, "box"));
+		tbl.add (new TextButton ("ATTACK SPEED", Assets.skin, "box"));
 		tbl.add (statAttackSpeed);
-		tbl.add (new TextButton ("ATTACK DAMAGE", skin, "box"));
+		tbl.add (new TextButton ("ATTACK DAMAGE", Assets.skin, "box"));
 		tbl.add (statAttackDamage).row ().spaceTop (4);
-		tbl.add (new TextButton ("CRITICAL CHANCE", skin, "box"));
+		tbl.add (new TextButton ("CRITICAL CHANCE", Assets.skin, "box"));
 		tbl.add (statCritChance);
-		tbl.add (new TextButton ("CRITICAL DAMAGE", skin, "box"));
+		tbl.add (new TextButton ("CRITICAL DAMAGE", Assets.skin, "box"));
 		tbl.add (statCritDamage);
 		
 		add (tblButtons).spaceRight (70).left().bottom();
@@ -163,13 +167,13 @@ public class StatsWindow extends Window
 	
 	public void show ()
 	{
-		addAction (Actions.moveTo (100, 80, 0.15f));
+		addAction (Actions.moveTo (100, 80, 0.5f, Interpolation.fade));
 		open = true;
 	}
 	
 	public void hide ()
 	{
-		addAction (Actions.moveTo (-getWidth(), 80, 0.15f));
+		addAction (Actions.moveTo (100, GameScreen.HEIGHT + getHeight (), 0.5f, Interpolation.fade));
 		open = false;
 	}
 	

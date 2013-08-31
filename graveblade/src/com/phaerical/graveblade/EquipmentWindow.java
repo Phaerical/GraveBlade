@@ -9,28 +9,27 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.phaerical.graveblade.Item.ItemType;
 import com.phaerical.graveblade.entities.Hero;
+import com.phaerical.graveblade.screens.GameScreen;
 
 public class EquipmentWindow extends Window
 {
 	private boolean open;
-	
 	private boolean needUpdate;
 	
 	private Hero hero;
-	private Skin skin;
+	private GameScreen game;
 	
-	public EquipmentWindow (Skin skin, Hero h)
+	public EquipmentWindow (GameScreen g)
 	{
-		super ("EQUIPMENT", skin);
+		super ("EQUIPMENT", Assets.skin);
 		
-		this.hero = h;
-		this.skin = skin;
+		this.game = g;
+		this.hero = game.getHero ();
 		
 		open = false;
 		
@@ -40,7 +39,7 @@ public class EquipmentWindow extends Window
 		setMovable (false);
 		setKeepWithinStage (false);
 		setSize (820, 390);
-		setPosition (-getWidth(), 80);
+		setPosition (100, GameScreen.HEIGHT + getHeight ());
 		padTop (70);
 		padLeft (35);
 		padRight (35);
@@ -71,19 +70,19 @@ public class EquipmentWindow extends Window
 		for (int i = 0; i < 6; i++)
 		{
 			Table tbl = new Table ();
-			tbl.setBackground (skin.getDrawable ("dark-box"));
+			tbl.setBackground (Assets.skin.getDrawable ("dark-box"));
 			tbl.pad (15, 23, 15, 23);
 			
 			for (ItemType it : ItemType.values ())
 			{
 				if (it.getIndex () == i)
 				{
-					Label lbl = new Label (it.toString (), skin, "small");
+					Label lbl = new Label (it.toString (), Assets.skin, "small");
 					tbl.add (lbl).align (Align.center).spaceBottom (11).row ();
 					
 					if (hero.getEquipment().isSlotEmpty(i))
 					{
-						Image img = new Image (skin.getDrawable ("equip-" + it.toString().toLowerCase()));
+						Image img = new Image (Assets.skin.getDrawable ("equip-" + it.toString().toLowerCase()));
 						tbl.add (img).size (64, 64);
 					}
 					
@@ -96,7 +95,7 @@ public class EquipmentWindow extends Window
 				Item item = hero.getEquipment().getEquip (i);
 				tbl.add (item).size (64, 64);
 				
-				TooltipManager tm = new TooltipManager ((Label) getStage().getRoot().findActor ("tooltip"), item.getTooltip ());
+				TooltipManager tm = new TooltipManager (game.getTooltip (), item.getTooltip ());
 				tbl.setTouchable (Touchable.enabled);
 				tbl.addListener (tm.getListener ());
 				
@@ -131,14 +130,14 @@ public class EquipmentWindow extends Window
 		for (int i = 0; i < 24; i++)
 		{
 			Table tbl = new Table ();
-			tbl.setBackground (skin.getDrawable ("box"));
+			tbl.setBackground (Assets.skin.getDrawable ("box"));
 			
 			if (i < hero.getInventory().size)
 			{
 				Item item = hero.getInventory().get(i);
 				tbl.add (item);
 				
-				TooltipManager tm = new TooltipManager ((Label) getStage().getRoot().findActor ("tooltip"), item.getTooltip ());
+				TooltipManager tm = new TooltipManager (game.getTooltip (), item.getTooltip ());
 				tbl.setTouchable (Touchable.enabled);
 				tbl.addListener (tm.getListener ());
 				
@@ -172,24 +171,18 @@ public class EquipmentWindow extends Window
 	
 	public void show ()
 	{
-		addAction (Actions.moveTo (100, 80, 0.5f, Interpolation.swingOut));
+		addAction (Actions.moveTo (100, 80, 0.5f, Interpolation.fade));
 		open = true;
 	}
 	
 	public void hide ()
 	{
-		addAction (Actions.moveTo (-getWidth(), 80, 0.5f, Interpolation.swingIn));
+		addAction (Actions.moveTo (100, GameScreen.HEIGHT + getHeight (), 0.5f, Interpolation.fade));
 		open = false;
 	}
 	
 	public boolean isOpen ()
 	{
 		return open;
-	}
-	
-	@Override
-	public void draw (SpriteBatch batch, float parentAlpha)
-	{
-		super.draw (batch, parentAlpha);
 	}
 }

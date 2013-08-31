@@ -12,6 +12,7 @@ public class GraveBlade extends Game
 	@Override
 	public void create()
 	{
+		Assets.load ();
 		SoundManager.load ();
 		screenManager = new ScreenManager (this);
 		

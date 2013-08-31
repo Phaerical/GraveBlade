@@ -15,10 +15,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.phaerical.graveblade.Assets;
 import com.phaerical.graveblade.Controller;
 import com.phaerical.graveblade.EquipmentWindow;
 import com.phaerical.graveblade.FloatingText;
 import com.phaerical.graveblade.GraveBlade;
+import com.phaerical.graveblade.OptionsWindow;
 import com.phaerical.graveblade.PauseWindow;
 import com.phaerical.graveblade.StatsWindow;
 import com.phaerical.graveblade.StatusBar;
@@ -43,6 +45,7 @@ public class GameScreen extends BasicScreen
 	private PauseWindow pauseWindow;
 	private StatsWindow statsWindow;
 	private EquipmentWindow equipWindow;
+	private OptionsWindow optionsWindow;
 	
 	public static FloatingText ft;
 	
@@ -111,15 +114,9 @@ public class GameScreen extends BasicScreen
 		controller = new Controller (hero, this);
 		stage.addListener (controller);
 		
-		
-		TextureAtlas atlas = new TextureAtlas (Gdx.files.internal ("skins/ui-skin.atlas"));
-		
-		Skin skin = new Skin (Gdx.files.internal ("skins/ui-skin.json"));
-		skin.addRegions (atlas);
-		
 		ui = new Stage ();
 		
-		tooltip = new Label ("", skin, "tooltip");
+		tooltip = new Label ("", Assets.skin, "tooltip");
 		tooltip.setName ("tooltip");
 		tooltip.setAlignment (Align.center, Align.left);
 		tooltip.setVisible (false);
@@ -130,11 +127,14 @@ public class GameScreen extends BasicScreen
 		pauseWindow = new PauseWindow (game);
 		ui.addActor (pauseWindow);
 		
-		statsWindow = new StatsWindow (skin, hero);
+		statsWindow = new StatsWindow (this);
 		ui.addActor (statsWindow);
 		
-		equipWindow = new EquipmentWindow (skin, hero);
+		equipWindow = new EquipmentWindow (this);
 		ui.addActor (equipWindow);
+		
+		optionsWindow = new OptionsWindow (this);
+		ui.addActor (optionsWindow);
 		
 		InputMultiplexer im = new InputMultiplexer (stage, ui);
 		
@@ -154,6 +154,8 @@ public class GameScreen extends BasicScreen
 		else
 		{
 			statsWindow.show ();
+			equipWindow.hide ();
+			optionsWindow.hide ();
 		}
 	}
 	
@@ -166,6 +168,22 @@ public class GameScreen extends BasicScreen
 		else
 		{
 			equipWindow.show ();
+			statsWindow.hide ();
+			optionsWindow.hide ();
+		}
+	}
+	
+	public void triggerOptionsWindow ()
+	{
+		if (optionsWindow.isOpen ())
+		{
+			optionsWindow.hide ();
+		}
+		else
+		{
+			optionsWindow.show ();
+			statsWindow.hide ();
+			equipWindow.hide ();
 		}
 	}
 	

@@ -33,7 +33,7 @@ public class StatusBar extends Table
 	private ImageButton btnStats;
 	private ImageButton btnEquipment;
 	private ImageButton btnSkills;
-	private ImageButton btnSettings;
+	private ImageButton btnOptions;
 	
 	public StatusBar (GameScreen g)
 	{
@@ -74,7 +74,7 @@ public class StatusBar extends Table
 		btnStats = new ImageButton (skin, "person");
 		btnEquipment = new ImageButton (skin, "sword");
 		btnSkills = new ImageButton (skin, "magic");
-		btnSettings = new ImageButton (skin, "gear");
+		btnOptions = new ImageButton (skin, "gear");
 		
 		add (levelBar).width(100).height(45).spaceRight (4);
 		add (healthBar).width(250).spaceRight (4);
@@ -83,12 +83,12 @@ public class StatusBar extends Table
 		add (btnStats).width(45).height(45).spaceRight (4);
 		add (btnEquipment).width(45).height(45).spaceRight (4);
 		add (btnSkills).width(45).height(45).spaceRight (4);
-		add (btnSettings).width(45).height(45).spaceRight (4);
+		add (btnOptions).width(45).height(45).spaceRight (4);
 		
 		btnStats.addListener ((new TooltipManager (game.getTooltip(), "STATS (U)", 0, 70).getListener ()));
 		btnEquipment.addListener ((new TooltipManager (game.getTooltip(), "EQUIPMENT (I)", 0, 70).getListener ()));
 		btnSkills.addListener ((new TooltipManager (game.getTooltip(), "SKILLS (K)", 0, 70).getListener ()));
-		btnSettings.addListener ((new TooltipManager (game.getTooltip(), "SETTINGS (O)", 0, 70).getListener ()));
+		btnOptions.addListener ((new TooltipManager (game.getTooltip(), "SETTINGS (O)", 0, 70).getListener ()));
 		
 		btnStats.addListener (new InputListener ()
 		{
@@ -104,6 +104,15 @@ public class StatusBar extends Table
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
 			{
 				game.triggerEquipmentWindow ();
+				return true;
+			}
+		});
+		
+		btnOptions.addListener (new InputListener ()
+		{
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
+			{
+				game.triggerOptionsWindow ();
 				return true;
 			}
 		});
