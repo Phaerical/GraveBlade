@@ -88,7 +88,7 @@ public class StatusBar extends Table
 		btnStats.addListener ((new TooltipManager (game.getTooltip(), "STATS (U)", 0, 70).getListener ()));
 		btnEquipment.addListener ((new TooltipManager (game.getTooltip(), "EQUIPMENT (I)", 0, 70).getListener ()));
 		btnSkills.addListener ((new TooltipManager (game.getTooltip(), "SKILLS (K)", 0, 70).getListener ()));
-		btnOptions.addListener ((new TooltipManager (game.getTooltip(), "SETTINGS (O)", 0, 70).getListener ()));
+		btnOptions.addListener ((new TooltipManager (game.getTooltip(), "OPTIONS (O)", 0, 70).getListener ()));
 		
 		btnStats.addListener (new InputListener ()
 		{
@@ -141,6 +141,15 @@ public class StatusBar extends Table
 		else
 		{
 			btnEquipment.setChecked (false);
+		}
+		
+		if (game.getOptionsWindow().isOpen ())
+		{
+			btnOptions.setChecked (true);
+		}
+		else
+		{
+			btnOptions.setChecked (false);
 		}
 	}
 	

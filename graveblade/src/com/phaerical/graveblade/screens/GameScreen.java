@@ -197,6 +197,11 @@ public class GameScreen extends BasicScreen
 		return equipWindow;
 	}
 	
+	public OptionsWindow getOptionsWindow ()
+	{
+		return optionsWindow;
+	}
+	
 	public Hero getHero ()
 	{
 		return hero;
