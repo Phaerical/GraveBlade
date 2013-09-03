@@ -1,22 +1,16 @@
 package com.phaerical.graveblade;
 
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.phaerical.graveblade.entities.Hero;
 import com.phaerical.graveblade.screens.GameScreen;
 
-public class StatsWindow extends Window
+public class StatsWindow extends BasicWindow
 {
-	private boolean open;
-	
 	private Label statPoints;
 	private TextButton statLevel;
 	private TextButton statHealth;
@@ -39,24 +33,10 @@ public class StatsWindow extends Window
 	
 	public StatsWindow (GameScreen g)
 	{
-		super ("STATS", Assets.skin);
+		super (g, "STATS");
 		
 		this.game = g;
 		this.hero = game.getHero ();
-		
-		open = false;
-		
-		//*************************************
-		// WINDOW PROPERTIES
-		//*************************************
-		setMovable (false);
-		setKeepWithinStage (false);
-		setSize (820, 390);
-		setPosition (100, GameScreen.HEIGHT + getHeight ());
-		padTop(70);
-		padLeft (35);
-		padRight (35);
-		left ();
 		
 		
 		//*************************************
@@ -161,27 +141,9 @@ public class StatsWindow extends Window
 		tbl.add (new TextButton ("CRITICAL DAMAGE", Assets.skin, "box"));
 		tbl.add (statCritDamage);
 		
-		add (tblButtons).spaceRight (70).left().bottom();
+		add (tblButtons).spaceRight (56).left().bottom();
 		add (tbl).width (500);
 	}
-	
-	public void show ()
-	{
-		addAction (Actions.moveTo (100, 80, 0.5f, Interpolation.fade));
-		open = true;
-	}
-	
-	public void hide ()
-	{
-		addAction (Actions.moveTo (100, GameScreen.HEIGHT + getHeight (), 0.5f, Interpolation.fade));
-		open = false;
-	}
-	
-	public boolean isOpen ()
-	{
-		return open;
-	}
-	
 	
 	@Override
 	public void act (float delta)

@@ -212,6 +212,11 @@ public class GameScreen extends BasicScreen
 		return tooltip;
 	}
 	
+	public Stage getUI ()
+	{
+		return ui;
+	}
+	
 	
 	@Override
 	public void render (float delta)
