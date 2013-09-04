@@ -1,4 +1,4 @@
-package com.phaerical.graveblade;
+package com.phaerical.graveblade.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.phaerical.graveblade.GraveBlade;
+import com.phaerical.graveblade.SoundManager;
 
 public class PauseWindow extends Table
 {

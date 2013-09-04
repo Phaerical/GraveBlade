@@ -1,4 +1,4 @@
-package com.phaerical.graveblade;
+package com.phaerical.graveblade.ui;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.math.Interpolation;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.phaerical.graveblade.Assets;
 import com.phaerical.graveblade.screens.GameScreen;
 
 public class BasicWindow extends Window

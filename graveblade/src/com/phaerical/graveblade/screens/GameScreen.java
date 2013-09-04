@@ -17,16 +17,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.phaerical.graveblade.Assets;
 import com.phaerical.graveblade.Controller;
-import com.phaerical.graveblade.EquipmentWindow;
 import com.phaerical.graveblade.FloatingText;
 import com.phaerical.graveblade.GraveBlade;
-import com.phaerical.graveblade.OptionsWindow;
-import com.phaerical.graveblade.PauseWindow;
-import com.phaerical.graveblade.StatsWindow;
-import com.phaerical.graveblade.StatusBar;
 import com.phaerical.graveblade.entities.Hero;
 import com.phaerical.graveblade.entities.Mushroom;
 import com.phaerical.graveblade.entities.Poring;
+import com.phaerical.graveblade.ui.EquipmentWindow;
+import com.phaerical.graveblade.ui.OptionsWindow;
+import com.phaerical.graveblade.ui.PauseWindow;
+import com.phaerical.graveblade.ui.StatsWindow;
+import com.phaerical.graveblade.ui.StatusBar;
 
 public class GameScreen extends BasicScreen
 {

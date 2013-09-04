@@ -1,11 +1,17 @@
-package com.phaerical.graveblade;
+package com.phaerical.graveblade.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.phaerical.graveblade.Assets;
+import com.phaerical.graveblade.Settings;
+import com.phaerical.graveblade.SoundManager;
 import com.phaerical.graveblade.screens.GameScreen;
 
 public class OptionsWindow extends BasicWindow
@@ -59,8 +65,29 @@ public class OptionsWindow extends BasicWindow
 		this.add (musicSlider).width (300).spaceBottom (40).colspan (2);
 		
 		this.row ();
-		this.add (new TextButton ("BACK TO MAIN MENU", Assets.skin)).size(200, 50).spaceRight (10);
-		this.add (new TextButton ("EXIT GAME", Assets.skin)).size(200, 50);
+		
+		TextButton backButton = new TextButton ("BACK TO MAIN MENU", Assets.skin);
+		backButton.addListener (new ChangeListener ()
+		{
+			@Override
+			public void changed (ChangeEvent event, Actor actor)
+			{
+				SoundManager.play (SoundManager.CLICK);
+			}
+		});
+	
+		TextButton exitButton = new TextButton ("EXIT GAME", Assets.skin);
+		exitButton.addListener (new ChangeListener ()
+		{
+			@Override
+			public void changed (ChangeEvent event, Actor actor)
+			{
+				Gdx.app.exit ();
+			}
+		});
+		
+		this.add (backButton).size(200, 50).spaceRight (10);
+		this.add (exitButton).size(200, 50);
 		
 		//CheckBox soundCheck = new CheckBox ("", skin);
 		//soundCheck.setChecked (!Settings.getSoundMuted ());

@@ -1,4 +1,4 @@
-package com.phaerical.graveblade;
+package com.phaerical.graveblade.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.phaerical.graveblade.Assets;
 import com.phaerical.graveblade.entities.Hero;
 import com.phaerical.graveblade.screens.GameScreen;
 

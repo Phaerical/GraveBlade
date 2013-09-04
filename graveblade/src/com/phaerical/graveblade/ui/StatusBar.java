@@ -1,4 +1,4 @@
-package com.phaerical.graveblade;
+package com.phaerical.graveblade.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.phaerical.graveblade.TooltipManager;
 import com.phaerical.graveblade.entities.Hero;
 import com.phaerical.graveblade.screens.GameScreen;
 
