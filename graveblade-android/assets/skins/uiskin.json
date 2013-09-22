@@ -1,0 +1,29 @@
+{
+	com.badlogic.gdx.graphics.g2d.BitmapFont: {
+		text-font: { file: upheaval.fnt },
+		pixel-font: { file: pixel_font.fnt }
+	},
+	com.badlogic.gdx.graphics.Color: {
+		white-transparent: { a: 0.8, b: 1, g: 1, r: 1 },
+		white: { a: 1, b: 1, g: 1, r: 1 },
+		gray: { a: 1, b: 0.8, g: 0.8, r: 0.8 },
+		black: { a: 1, b: 0, g: 0, r: 0 }
+	},
+	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+		default: { font: text-font, fontColor: white-transparent, downFontColor: gray, overFontColor: white },
+	},
+	com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
+		default-horizontal: { background: default-slider, knob: default-slider-knob },
+		hp-bar: { background: default-slider, knobBefore: default-slider-knob }
+	},
+	com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+		default: { font: text-font, fontColor: white },
+		small: { font: pixel-font, fontColor: white }
+	},
+	com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+		default: { selection: selection, background: textfield, font: text-font, fontColor: white, cursor: cursor }
+	},
+	com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
+		default: { checkboxOn: check-on, checkboxOff: check-off, font: text-font, fontColor: white }
+	}
+}

@@ -1,0 +1,41 @@
+{
+	com.badlogic.gdx.graphics.g2d.BitmapFont: {
+		text-font: { file: upheaval.fnt },
+		pixel-font: { file: pixel_font.fnt }
+	},
+	com.badlogic.gdx.graphics.Color: {
+		white-transparent: { a: 0.8, b: 1, g: 1, r: 1 },
+		white: { a: 1, b: 1, g: 1, r: 1 },
+		gray: { a: 1, b: 0.8, g: 0.8, r: 0.8 },
+		black: { a: 1, b: 0, g: 0, r: 0 }
+	},
+	com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+		default: { titleFont: text-font, titleFontColor: white, background: window-large }
+	},
+	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+		default: { font: pixel-font, fontColor: white, up: gray-bar, over: light-gray-bar, down: dark-gray-bar, disabled: dark-gray-bar, pressedOffsetY: 2, unpressedOffsetY: 2 },
+		box: { font: pixel-font, fontColor: white, up: dark-gray-bar, pressedOffsetY: 2, unpressedOffsetY: 2 }
+	},
+	com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
+		close: { imageUp: close-up, imageOver: close-over, imageDown: close-down },
+		left: { imageUp: left-arrow-up, imageDown: left-arrow-down },
+		right: { imageUp: right-arrow-up, imageDown: right-arrow-down },
+		jump: { imageUp: jump-up, imageDown: jump-down },
+		attack: { imageUp: attack-up, imageDown: attack-down },
+		person: { up: gray-bar, over: light-gray-bar, down: dark-gray-bar, imageUp: person, checked: dark-gray-bar },
+		sword: { up: gray-bar, over: light-gray-bar, down: dark-gray-bar, imageUp: sword, checked: dark-gray-bar },
+		magic: { up: gray-bar, over: light-gray-bar, down: dark-gray-bar, imageUp: magic, checked: dark-gray-bar },
+		gear: { up: gray-bar, over: light-gray-bar, down: dark-gray-bar, imageUp: gear, checked: dark-gray-bar },
+	},
+	com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
+		default-horizontal: { background: gray-bar, knobBefore: dark-gray-bar },
+		hp-bar: { background: gray-bar, knobBefore: red-bar },
+		mp-bar: { background: gray-bar, knobBefore: blue-bar },
+		exp-bar: { background: gray-bar, knobBefore: yellow-bar }
+	},
+	com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+		default: { font: text-font, fontColor: white },
+		small: { font: pixel-font, fontColor: white },
+		tooltip: { font: pixel-font, fontColor: white, background: tooltip }
+	},
+}

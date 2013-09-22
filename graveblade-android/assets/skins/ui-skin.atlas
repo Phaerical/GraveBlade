@@ -1,0 +1,254 @@
+
+ui-skin.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+attack-down
+  rotate: false
+  xy: 1, 175
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+attack-up
+  rotate: false
+  xy: 1, 93
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+jump-down
+  rotate: false
+  xy: 83, 175
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+jump-up
+  rotate: false
+  xy: 1, 11
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+left-arrow-down
+  rotate: false
+  xy: 83, 93
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+left-arrow-up
+  rotate: false
+  xy: 165, 175
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+right-arrow-down
+  rotate: false
+  xy: 83, 11
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+right-arrow-up
+  rotate: false
+  xy: 165, 93
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+window-large
+  rotate: false
+  xy: 165, 1
+  size: 32, 90
+  split: 6, 6, 71, 6
+  orig: 32, 90
+  offset: 0, 0
+  index: -1
+equip-armor
+  rotate: false
+  xy: 247, 191
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+equip-boots
+  rotate: false
+  xy: 247, 125
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+equip-gloves
+  rotate: false
+  xy: 313, 191
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+equip-helm
+  rotate: false
+  xy: 313, 125
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+equip-misc
+  rotate: false
+  xy: 379, 191
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+equip-weapon
+  rotate: false
+  xy: 379, 125
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+status-bar
+  rotate: false
+  xy: 199, 31
+  size: 8, 60
+  orig: 8, 60
+  offset: 0, 0
+  index: -1
+blue-bar
+  rotate: false
+  xy: 199, 1
+  size: 28, 28
+  split: 2, 2, 2, 2
+  orig: 28, 28
+  offset: 0, 0
+  index: -1
+box
+  rotate: false
+  xy: 445, 223
+  size: 32, 32
+  split: 6, 6, 8, 8
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+coin
+  rotate: false
+  xy: 479, 223
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+dark-box
+  rotate: false
+  xy: 209, 59
+  size: 32, 32
+  split: 6, 6, 8, 8
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+gear
+  rotate: false
+  xy: 445, 189
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+magic
+  rotate: false
+  xy: 479, 189
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+person
+  rotate: false
+  xy: 445, 155
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+sword
+  rotate: false
+  xy: 479, 155
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+tooltip
+  rotate: false
+  xy: 247, 91
+  size: 32, 32
+  split: 6, 6, 6, 6
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+window
+  rotate: false
+  xy: 281, 91
+  size: 32, 32
+  split: 6, 6, 6, 6
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+close-down
+  rotate: false
+  xy: 315, 93
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+close-over
+  rotate: false
+  xy: 347, 93
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+close-up
+  rotate: false
+  xy: 379, 93
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+dark-gray-bar
+  rotate: false
+  xy: 445, 125
+  size: 28, 28
+  split: 2, 2, 2, 2
+  orig: 28, 28
+  offset: 0, 0
+  index: -1
+gray-bar
+  rotate: false
+  xy: 411, 95
+  size: 28, 28
+  split: 2, 2, 2, 2
+  orig: 28, 28
+  offset: 0, 0
+  index: -1
+light-gray-bar
+  rotate: false
+  xy: 475, 125
+  size: 28, 28
+  split: 2, 2, 2, 2
+  orig: 28, 28
+  offset: 0, 0
+  index: -1
+red-bar
+  rotate: false
+  xy: 441, 95
+  size: 28, 28
+  split: 2, 2, 2, 2
+  orig: 28, 28
+  offset: 0, 0
+  index: -1
+yellow-bar
+  rotate: false
+  xy: 471, 95
+  size: 28, 28
+  split: 2, 2, 2, 2
+  orig: 28, 28
+  offset: 0, 0
+  index: -1
