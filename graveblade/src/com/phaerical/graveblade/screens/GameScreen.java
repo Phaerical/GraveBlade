@@ -22,6 +22,7 @@ import com.phaerical.graveblade.GraveBlade;
 import com.phaerical.graveblade.entities.Hero;
 import com.phaerical.graveblade.entities.Mushroom;
 import com.phaerical.graveblade.entities.Poring;
+import com.phaerical.graveblade.ui.ControlButtons;
 import com.phaerical.graveblade.ui.EquipmentWindow;
 import com.phaerical.graveblade.ui.OptionsWindow;
 import com.phaerical.graveblade.ui.PauseWindow;
@@ -87,7 +88,7 @@ public class GameScreen extends BasicScreen
 		renderer = new OrthogonalTiledMapRenderer (map);
 		
 		camera = new OrthographicCamera ();
-		camera.setToOrtho (false, 1024, 576);
+		camera.setToOrtho (false, WIDTH, HEIGHT);
 		
 		hero = new Hero (map);
 		hero.setPosition(500, 200);
@@ -123,6 +124,7 @@ public class GameScreen extends BasicScreen
 		ui.addActor (tooltip);
 		
 		ui.addActor (new StatusBar (this));
+		ui.addActor (new ControlButtons (this));
 		
 		pauseWindow = new PauseWindow (game);
 		ui.addActor (pauseWindow);

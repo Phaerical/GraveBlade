@@ -55,7 +55,7 @@ public class StatusBar extends Table
 		skin.getDrawable ("yellow-bar").setMinHeight (45);
 		
 		setBackground (skin.getTiledDrawable ("status-bar"));
-		setSize (1024, 60);
+		setSize (GameScreen.WIDTH, 60);
 		left ();
 		padLeft (8);
 		
@@ -77,13 +77,16 @@ public class StatusBar extends Table
 		btnSkills = new ImageButton (skin, "magic");
 		btnOptions = new ImageButton (skin, "gear");
 		
-		add (levelBar).width(100).height(45).spaceRight (4);
-		add (healthBar).width(250).spaceRight (4);
-		add (manaBar).width(200).spaceRight (4);
-		add (expBar).width(250).spaceRight (4);
+		int space = GameScreen.WIDTH - 3 * 45 - 8 * 4;
+		
+		
+		add (levelBar).width(space * 0.2f).height(45).spaceRight (4);
+		add (healthBar).width(space * 0.4f).spaceRight (4);
+		//add (manaBar).width(space * 0.2f).spaceRight (4);
+		add (expBar).width(space * 0.4f).spaceRight (4);
 		add (btnStats).width(45).height(45).spaceRight (4);
 		add (btnEquipment).width(45).height(45).spaceRight (4);
-		add (btnSkills).width(45).height(45).spaceRight (4);
+		//add (btnSkills).width(45).height(45).spaceRight (4);
 		add (btnOptions).width(45).height(45).spaceRight (4);
 		
 		btnStats.addListener ((new TooltipManager (game.getTooltip(), "STATS (U)", 0, 70).getListener ()));
@@ -164,8 +167,8 @@ public class StatusBar extends Table
         font.draw (batch, "HP", healthBar.getX()+20, 33);
         font.drawWrapped (batch, hero.getHealth() + "/" + hero.getMaxHealth(), healthBar.getX(), 33, healthBar.getWidth() - 20, HAlignment.RIGHT);
         
-        font.draw (batch, "MP", manaBar.getX()+20, 33);
-        font.drawWrapped (batch, "100/100", manaBar.getX(), 33, manaBar.getWidth() - 20, HAlignment.RIGHT);
+        //font.draw (batch, "MP", manaBar.getX()+20, 33);
+        //font.drawWrapped (batch, "100/100", manaBar.getX(), 33, manaBar.getWidth() - 20, HAlignment.RIGHT);
         
         font.draw (batch, "XP", expBar.getX()+20, 33);
         font.drawWrapped (batch, Math.round (((double) hero.getExp () / hero.getMaxExp () * 100) * 100) / 100.00 + "%",

@@ -8,8 +8,8 @@ import com.phaerical.graveblade.GraveBlade;
 
 public abstract class BasicScreen implements Screen
 {
-	public static final int WIDTH = 1024;
-	public static final int HEIGHT = 576;
+	public static final int WIDTH = 800;
+	public static final int HEIGHT = 480;
 	
 	protected final GraveBlade game;
 	protected final Stage stage;

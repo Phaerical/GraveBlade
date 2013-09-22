@@ -27,11 +27,11 @@ public class BasicWindow extends Window
 		//*************************************
 		setMovable (false);
 		setKeepWithinStage (false);
-		setSize (820, 390);
-		setPosition (100, GameScreen.HEIGHT + getHeight ());
+		setSize (GameScreen.WIDTH - 16, 390);
+		setPosition (8, GameScreen.HEIGHT + getHeight ());
 		padTop (50);
-		padLeft (35);
-		padRight (35);
+		padLeft (18);
+		padRight (18);
 		padBottom (25);
 		
 		btnClose = new ImageButton (Assets.skin, "close");
@@ -55,13 +55,13 @@ public class BasicWindow extends Window
 	
 	public void show ()
 	{
-		addAction (Actions.moveTo (100, 80, 0.5f, Interpolation.fade));
+		addAction (Actions.moveTo (8, 70, 0.5f, Interpolation.fade));
 		open = true;
 	}
 	
 	public void hide ()
 	{
-		addAction (Actions.moveTo (100, GameScreen.HEIGHT + getHeight (), 0.5f, Interpolation.fade));
+		addAction (Actions.moveTo (8, GameScreen.HEIGHT + getHeight (), 0.5f, Interpolation.fade));
 		open = false;
 	}
 	
