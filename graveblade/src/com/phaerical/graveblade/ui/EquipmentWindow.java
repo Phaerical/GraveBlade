@@ -86,11 +86,11 @@ public class EquipmentWindow extends BasicWindow
 				item.addListener (new InputListener () {
 					public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
 					{
-						if (button == Buttons.RIGHT)
-						{
+						//if (button == Buttons.RIGHT)
+						//{
 							hero.getEquipment().removeEquip ((Item) event.getListenerActor ());
 							needUpdate = true;
-						}
+						//}
 						
 						return true;
 					}
@@ -129,11 +129,11 @@ public class EquipmentWindow extends BasicWindow
 				{
 					public boolean touchDown (InputEvent event, float x, float y, int pointer, int button)
 					{
-						if (button == Buttons.RIGHT)
-						{
+						//if (button == Buttons.RIGHT)
+						//{
 							hero.getEquipment().equipFromInventory ((Item) event.getListenerActor ());
 							needUpdate = true;
-						}
+						//}
 						
 						return true;
 					}

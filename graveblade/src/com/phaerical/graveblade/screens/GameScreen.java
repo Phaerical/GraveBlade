@@ -106,7 +106,7 @@ public class GameScreen extends BasicScreen
 		{
 			mushroom = new Mushroom (map);
 			mushroom.setPosition (400 + 100 * i, 400);
-			//stage.addActor (mushroom);
+			stage.addActor (mushroom);
 		}
 		
 		ft = new FloatingText ();
